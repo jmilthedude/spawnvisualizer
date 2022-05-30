@@ -1,0 +1,25 @@
+
+modLoader="javafml" #mandatory
+loaderVersion="[40,)"
+license="MIT"
+[[mods]] #mandatory
+modId="spawnvisualizer" #mandatory
+version="${version}" #mandatory
+displayName="Spawn Visualizer" #mandatory
+authors="jmilthedude" #optional
+description='''
+A client side only mod which allows you to visualize where various mobs can spawn.
+'''
+
+[[dependencies.spawnvisualizer]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[40,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.spawnvisualizer]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18)"
+    ordering="NONE"
+    side="BOTH"
