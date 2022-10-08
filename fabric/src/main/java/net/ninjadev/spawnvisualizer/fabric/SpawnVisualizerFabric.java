@@ -1,4 +1,4 @@
-package net.ninjadev.spawnvisualizer;
+package net.ninjadev.spawnvisualizer.fabric;
 
 import net.fabricmc.api.ModInitializer;
 

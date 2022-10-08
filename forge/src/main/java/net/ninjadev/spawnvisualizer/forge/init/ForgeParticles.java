@@ -1,4 +1,4 @@
-package net.ninjadev.spawnvisualizer.init;
+package net.ninjadev.spawnvisualizer.forge.init;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleType;
