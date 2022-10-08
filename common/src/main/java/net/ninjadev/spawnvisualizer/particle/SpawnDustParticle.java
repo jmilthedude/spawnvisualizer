@@ -1,7 +1,14 @@
 package net.ninjadev.spawnvisualizer.particle;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.worldselection.EditGameRulesScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.util.Mth;
 
 public class SpawnDustParticle<T extends SpawnDustParticleOptions>
@@ -21,6 +28,12 @@ public class SpawnDustParticle<T extends SpawnDustParticleOptions>
     }
 
     @Override
+    public void render(VertexConsumer vertexConsumer, Camera camera, float f) {
+        RenderSystem.setShader(GameRenderer::getParticleShader);
+        super.render(vertexConsumer, camera, f);
+    }
+
+    @Override
     public float getQuadSize(float f) {
         return this.quadSize * Mth.clamp(((float) this.lifetime + f) / (float) this.age * 32.0f, 0.0f, 1.0f);
     }
@@ -32,8 +45,13 @@ public class SpawnDustParticle<T extends SpawnDustParticleOptions>
     }
 
     @Override
+    protected int getLightColor(float f) {
+        return LightTexture.FULL_BRIGHT;
+    }
+
+    @Override
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
     public static class Provider implements ParticleProvider<SpawnDustParticleOptions> {
