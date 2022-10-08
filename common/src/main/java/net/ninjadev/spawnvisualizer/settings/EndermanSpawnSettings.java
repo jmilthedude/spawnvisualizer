@@ -3,6 +3,7 @@ package net.ninjadev.spawnvisualizer.settings;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -22,9 +23,9 @@ public class EndermanSpawnSettings extends SpawnSettings {
 
     @Override
     protected boolean isValidLocation(ResourceLocation worldKey, ResourceKey<Biome> biomeKey) {
-        return (worldKey.equals(DimensionType.OVERWORLD_EFFECTS) && biomeKey != Biomes.MUSHROOM_FIELDS) ||
-                (worldKey.equals(DimensionType.NETHER_EFFECTS) && netherBiomes.contains(biomeKey)) ||
-                worldKey.equals(DimensionType.END_EFFECTS);
+        return (worldKey.equals(Level.OVERWORLD.location()) && biomeKey != Biomes.MUSHROOM_FIELDS) ||
+                (worldKey.equals(Level.NETHER.location()) && netherBiomes.contains(biomeKey)) ||
+                worldKey.equals(Level.END.location());
     }
 
     @Override

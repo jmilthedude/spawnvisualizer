@@ -25,7 +25,7 @@ public class SlimeSpawnSettings extends SpawnSettings {
         }
 
         if (isSlimeChunk(world, pos)) {
-            if (!worldKey.equals(DimensionType.OVERWORLD_EFFECTS)) return false;
+            if (!worldKey.equals(Level.OVERWORLD.location())) return false;
             return isSafeSpawnPosition(world, pos);
         }
 
@@ -40,7 +40,7 @@ public class SlimeSpawnSettings extends SpawnSettings {
 
     @Override
     protected boolean isValidLocation(ResourceLocation worldKey, ResourceKey<Biome> biomeKey) {
-        if (!worldKey.equals(DimensionType.OVERWORLD_EFFECTS)) return false;
+        if (!worldKey.equals(Level.OVERWORLD.location())) return false;
         return biomeKey == Biomes.SWAMP;
     }
 

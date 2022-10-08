@@ -15,7 +15,7 @@ import java.awt.*;
 public class PiglinSpawnSettings extends SpawnSettings {
     @Override
     protected boolean isValidLocation(ResourceLocation worldKey, ResourceKey<Biome> biomeKey) {
-        if (!worldKey.equals(DimensionType.NETHER_EFFECTS)) return false;
+        if (!worldKey.equals(Level.NETHER.location())) return false;
 
         return biomeKey == Biomes.NETHER_WASTES || biomeKey == Biomes.CRIMSON_FOREST;
     }

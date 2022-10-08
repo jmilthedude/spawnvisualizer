@@ -9,6 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
 
+import java.awt.*;
+
 public abstract class Entry extends AbstractWidget {
     public static final int BUTTON_WIDTH = 90;
     public static final int BUTTON_HEIGHT = 24;

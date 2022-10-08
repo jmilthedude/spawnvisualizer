@@ -20,7 +20,7 @@ public class MagmaCubeSpawnSettings extends SpawnSettings {
 
     @Override
     protected boolean isValidLocation(ResourceLocation worldKey, ResourceKey<Biome> biomeKey) {
-        return worldKey.equals(DimensionType.NETHER_EFFECTS) && (biomeKey == Biomes.NETHER_WASTES || biomeKey == Biomes.BASALT_DELTAS);
+        return worldKey.equals(Level.NETHER.location()) && (biomeKey == Biomes.NETHER_WASTES || biomeKey == Biomes.BASALT_DELTAS);
     }
 
     @Override

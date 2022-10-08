@@ -10,6 +10,5 @@ public class SpawnVisualizerForge {
 
     public SpawnVisualizerForge() {
         SpawnVisualizer.init();
-        ForgeKeybinds.init();
     }
 }

@@ -1,18 +1,17 @@
 package net.ninjadev.spawnvisualizer.gui.widget.entry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.*;
 import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
 import net.ninjadev.spawnvisualizer.settings.SpawnSettings;
 
 public class MobEntry extends Entry {
 
     private final SpawnSettings validator;
-    private ScrollingListWidget parent;
+    private final ScrollingListWidget parent;
 
     public MobEntry(int x, int y, SpawnSettings validator, ScrollingListWidget parent) {
-
-        super(x, y, new TranslatableComponent(validator.getType().getDescriptionId()), parent);
+        super(x, y, Component.translatable(validator.getType().getDescriptionId()), parent);
         this.validator = validator;
         this.selected = validator.isEnabled();
         this.parent = parent;
@@ -47,5 +46,9 @@ public class MobEntry extends Entry {
             vLine(matrices, x, y, y + BUTTON_HEIGHT - 1, validator.getColor().getRGB());
             vLine(matrices, x + BUTTON_WIDTH - 1, y, y + BUTTON_HEIGHT - 1, validator.getColor().getRGB());
         }
+    }
+
+    public ScrollingListWidget getParent() {
+        return parent;
     }
 }

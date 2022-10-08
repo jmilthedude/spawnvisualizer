@@ -1,15 +1,19 @@
 package net.ninjadev.spawnvisualizer.forge.init;
 
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.init.ModKeybinds;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeKeybinds {
 
-    public static void init() {
+    @SubscribeEvent
+    public static void onKeybindMapping(RegisterKeyMappingsEvent event) {
         SpawnVisualizer.LOGGER.info("Initialize Forge Keybinds");
-        ClientRegistry.registerKeyBinding(ModKeybinds.OPEN_MENU);
-        ClientRegistry.registerKeyBinding(ModKeybinds.TOGGLE);
+        event.register(ModKeybinds.OPEN_MENU);
+        event.register(ModKeybinds.TOGGLE);
     }
 
 }

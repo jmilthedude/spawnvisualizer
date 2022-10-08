@@ -3,10 +3,11 @@ package net.ninjadev.spawnvisualizer.forge.init;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.particle.SpawnDustParticle;
 
@@ -19,13 +20,12 @@ public class ForgeParticles {
     }
 
     @SubscribeEvent
-    public static void onParticleFactoryRegistry(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particleEngine.register(SPAWN_DUST, SpawnDustParticle.Provider::new);
+    public static void onParticleFactoryRegistry(RegisterParticleProvidersEvent event) {
+        event.register(SPAWN_DUST, SpawnDustParticle.Provider::new);
     }
 
     @SubscribeEvent
-    public static void onParticleTypeRegistry(RegistryEvent.Register<ParticleType<?>> event) {
-        SPAWN_DUST.setRegistryName(new ResourceLocation(SpawnVisualizer.MODID, "spawn_dust"));
-        event.getRegistry().register(SPAWN_DUST);
+    public static void onParticleTypeRegistry(RegisterEvent event) {
+        event.register(ForgeRegistries.Keys.PARTICLE_TYPES , registry -> registry.register(new ResourceLocation(SpawnVisualizer.MODID, "spawn_dust"), SPAWN_DUST));
     }
 }
