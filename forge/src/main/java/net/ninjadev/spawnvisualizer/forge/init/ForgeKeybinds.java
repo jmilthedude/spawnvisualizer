@@ -1,7 +1,8 @@
-package net.ninjadev.spawnvisualizer.init;
+package net.ninjadev.spawnvisualizer.forge.init;
 
 import net.minecraftforge.client.ClientRegistry;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
+import net.ninjadev.spawnvisualizer.init.ModKeybinds;
 
 public class ForgeKeybinds {
 

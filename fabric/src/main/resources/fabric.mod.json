@@ -15,10 +15,10 @@
   "environment": "client",
   "entrypoints": {
     "main": [
-      "net.ninjadev.spawnvisualizer.SpawnVisualizerFabric"
+      "net.ninjadev.spawnvisualizer.fabric.SpawnVisualizerFabric"
     ],
     "client": [
-      "net.ninjadev.spawnvisualizer.SpawnVisualizerClient"
+      "net.ninjadev.spawnvisualizer.fabric.SpawnVisualizerClient"
     ]
   },
   "depends": {

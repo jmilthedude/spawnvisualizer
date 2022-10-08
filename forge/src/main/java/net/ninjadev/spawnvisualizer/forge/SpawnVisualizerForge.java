@@ -1,11 +1,8 @@
-package net.ninjadev.spawnvisualizer;
+package net.ninjadev.spawnvisualizer.forge;
 
 import net.minecraftforge.fml.common.Mod;
-import net.ninjadev.spawnvisualizer.init.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.Random;
+import net.ninjadev.spawnvisualizer.forge.init.ForgeKeybinds;
+import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 
 
 @Mod("spawnvisualizer")

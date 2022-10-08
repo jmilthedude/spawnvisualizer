@@ -20,6 +20,6 @@ A client side only mod which allows you to visualize where various mobs can spaw
 [[dependencies.spawnvisualizer]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18)"
+    versionRange="[1.18,)"
     ordering="NONE"
     side="BOTH"

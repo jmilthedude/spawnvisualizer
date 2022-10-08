@@ -1,7 +1,10 @@
-package net.ninjadev.spawnvisualizer;
+package net.ninjadev.spawnvisualizer.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.ninjadev.spawnvisualizer.init.*;
+import net.ninjadev.spawnvisualizer.fabric.init.FabricEvents;
+import net.ninjadev.spawnvisualizer.fabric.init.FabricKeybinds;
+import net.ninjadev.spawnvisualizer.fabric.init.FabricParticles;
+import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 
 public class SpawnVisualizerClient implements ClientModInitializer {
     @Override

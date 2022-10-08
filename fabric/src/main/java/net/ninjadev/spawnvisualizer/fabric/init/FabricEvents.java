@@ -1,4 +1,4 @@
-package net.ninjadev.spawnvisualizer.init;
+package net.ninjadev.spawnvisualizer.fabric.init;
 
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
