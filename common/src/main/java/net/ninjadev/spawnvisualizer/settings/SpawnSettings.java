@@ -3,12 +3,16 @@ package net.ninjadev.spawnvisualizer.settings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 
 import java.awt.*;
@@ -44,6 +48,9 @@ public abstract class SpawnSettings {
     protected abstract boolean isValidLocation(ResourceLocation worldKey, ResourceKey<Biome> category);
 
     protected boolean isValidLightLevel(Level world, BlockPos pos) {
+        if (world.dimension().equals(Level.NETHER)) {
+            return world.getBrightness(LightLayer.BLOCK, pos) <= 11;
+        }
         return world.getBrightness(LightLayer.BLOCK, pos) == 0;
     }
 
