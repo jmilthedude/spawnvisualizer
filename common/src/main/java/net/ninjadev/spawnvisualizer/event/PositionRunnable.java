@@ -1,5 +1,7 @@
 package net.ninjadev.spawnvisualizer.event;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -16,22 +18,26 @@ import java.util.List;
 
 public class PositionRunnable implements Runnable {
 
-    private final Level world;
     private final BlockPos pos;
     private final GeneralConfig config;
 
     private List<ParticleSpawn> spawnablePositions = new ArrayList<>();
 
-    public PositionRunnable(final Level world, final BlockPos pos, Config config) {
-        this.world = world;
+    public PositionRunnable(final BlockPos pos, Config config) {
         this.pos = pos;
         this.config = (GeneralConfig) config;
     }
 
     @Override
     public void run() {
-        spawnablePositions = getSpawnablePositions(this.world, this.pos);
-        addParticlesAtPositions(this.world);
+        spawnablePositions = getSpawnablePositions(getLevel(), this.pos);
+        addParticlesAtPositions(getLevel());
+    }
+
+    private Level getLevel() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return null;
+        return player.level;
     }
 
     private List<ParticleSpawn> getSpawnablePositions(Level world, BlockPos playerPos) {

@@ -36,7 +36,7 @@ public class SpawnVisualizerEvent {
         BlockPos playerPos = player.getOnPos();
         try {
             if (visualizerThread != null && visualizerThread.isAlive()) return;
-            PositionRunnable runnable = new PositionRunnable(world, playerPos, ModConfigs.GENERAL);
+            PositionRunnable runnable = new PositionRunnable(playerPos, ModConfigs.GENERAL);
             visualizerThread = new Thread(runnable);
             visualizerThread.start();
         } catch (Exception ex) {
