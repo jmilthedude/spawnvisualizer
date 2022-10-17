@@ -10,37 +10,39 @@ import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModKeybinds;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 public class SpawnVisualizerEvent {
 
-    private static Thread visualizerThread;
+    private static long nextId = 0;
+
+    private static ScheduledFuture<?> scheduled;
 
     public static void tick(Minecraft minecraft) {
+        if (minecraft.screen != null) return;
+        if (scheduled == null) startVisualizer();
 
         while (ModKeybinds.OPEN_MENU.consumeClick()) {
             minecraft.setScreen(new ConfigScreen(Component.nullToEmpty("Spawn Visualizer Options")));
         }
         while (ModKeybinds.TOGGLE.consumeClick()) {
-            ModConfigs.GENERAL.toggleEnabled();
+            if (ModConfigs.GENERAL.toggleEnabled()) {
+                startVisualizer();
+            } else {
+                stopVisualizer();
+            }
         }
+    }
 
-        if (!ModConfigs.GENERAL.isEnabled()) {
-            return;
-        }
+    public static void stopVisualizer() {
+        scheduled.cancel(true);
+    }
 
-        LocalPlayer player = minecraft.player;
-        if (player == null) return;
-        Level world = player.level;
-
-        if (world.getGameTime() % 20 != 0) return;
-
-        BlockPos playerPos = player.getOnPos();
-        try {
-            if (visualizerThread != null && visualizerThread.isAlive()) return;
-            PositionRunnable runnable = new PositionRunnable(playerPos, ModConfigs.GENERAL);
-            visualizerThread = new Thread(runnable);
-            visualizerThread.start();
-        } catch (Exception ex) {
-            SpawnVisualizer.LOGGER.error(ex.getMessage());
-        }
+    public static void startVisualizer() {
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        scheduled = executorService.scheduleAtFixedRate(new PositionRunnable(nextId++), 0L, 1, TimeUnit.SECONDS);
     }
 }

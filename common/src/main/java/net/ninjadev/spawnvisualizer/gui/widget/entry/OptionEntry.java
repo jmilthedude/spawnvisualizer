@@ -1,6 +1,7 @@
 package net.ninjadev.spawnvisualizer.gui.widget.entry;
 
 import net.minecraft.network.chat.Component;
+import net.ninjadev.spawnvisualizer.event.SpawnVisualizerEvent;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 
 public class OptionEntry extends Entry {
@@ -12,7 +13,11 @@ public class OptionEntry extends Entry {
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        ModConfigs.GENERAL.toggleEnabled();
+        if (ModConfigs.GENERAL.toggleEnabled()) {
+            SpawnVisualizerEvent.startVisualizer();
+        } else {
+            SpawnVisualizerEvent.stopVisualizer();
+        }
         this.selected = ModConfigs.GENERAL.isEnabled();
     }
 }
