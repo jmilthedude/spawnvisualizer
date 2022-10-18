@@ -43,6 +43,6 @@ public class SpawnVisualizerEvent {
 
     public static void startVisualizer() {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        scheduled = executorService.scheduleAtFixedRate(new PositionRunnable(nextId++), 0L, 1, TimeUnit.SECONDS);
+        scheduled = executorService.scheduleAtFixedRate(new PositionRunnable(nextId++), 0L, 1250, TimeUnit.MILLISECONDS);
     }
 }
