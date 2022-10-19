@@ -24,7 +24,7 @@ public class SlimeSpawnSettings extends SpawnSettings {
             return false;
         }
 
-        if (isSlimeChunk(world, pos)) {
+        if (isSlimeChunk(world, pos) && pos.getY() < 40) {
             if (!worldKey.equals(Level.OVERWORLD.location())) return false;
             return isSafeSpawnPosition(world, pos);
         }
