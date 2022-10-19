@@ -2,7 +2,6 @@ package net.ninjadev.spawnvisualizer.config;
 
 import com.google.gson.annotations.Expose;
 import net.minecraft.util.Mth;
-import net.ninjadev.spawnvisualizer.event.SpawnVisualizerEvent;
 
 public class GeneralConfig extends Config {
 

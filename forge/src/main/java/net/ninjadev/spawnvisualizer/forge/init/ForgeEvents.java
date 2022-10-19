@@ -6,7 +6,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
-import net.ninjadev.spawnvisualizer.event.SpawnVisualizerEvent;
+import net.ninjadev.spawnvisualizer.visualizer.SpawnVisualizerEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeEvents {

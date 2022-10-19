@@ -3,7 +3,7 @@ package net.ninjadev.spawnvisualizer.fabric.init;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
-import net.ninjadev.spawnvisualizer.event.SpawnVisualizerEvent;
+import net.ninjadev.spawnvisualizer.visualizer.SpawnVisualizerEvent;
 
 public class FabricEvents {
 
