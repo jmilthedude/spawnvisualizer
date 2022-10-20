@@ -4,10 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
-import net.ninjadev.spawnvisualizer.init.ModSpawnSettings;
+import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
 import net.ninjadev.spawnvisualizer.settings.SpawnSettings;
+import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,15 +28,23 @@ public class PositionScanner {
             for (int y = -ModConfigs.GENERAL.getRangeVertical(); y <= ModConfigs.GENERAL.getRangeVertical(); y++) {
                 for (int z = -ModConfigs.GENERAL.getRangeHorizontal(); z <= ModConfigs.GENERAL.getRangeHorizontal(); z++) {
                     BlockPos current = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                    ModSpawnSettings.getRegistry()
-                            .values()
+                    ModSpawnValidators.getValidators()
                             .stream()
-                            .filter(SpawnSettings::isEnabled)
-                            .filter(spawnSettings -> spawnSettings.canSpawn(level, current))
+                            .filter(SpawnValidator::isEnabled)
+                            .filter(spawnValidator -> spawnValidator.canSpawn(level, current))
                             .forEach(spawnSettings -> {
                                 List<Color> colors = spawnablePositions.computeIfAbsent(current, blockPos -> new ArrayList<>());
                                 colors.add(spawnSettings.getColor());
                             });
+//                    ModSpawnSettings.getRegistry()
+//                            .values()
+//                            .stream()
+//                            .filter(SpawnSettings::isEnabled)
+//                            .filter(spawnSettings -> spawnSettings.canSpawn(level, current))
+//                            .forEach(spawnSettings -> {
+//                                List<Color> colors = spawnablePositions.computeIfAbsent(current, blockPos -> new ArrayList<>());
+//                                colors.add(spawnSettings.getColor());
+//                            });
                 }
             }
         }

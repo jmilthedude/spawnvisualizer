@@ -2,13 +2,16 @@ package net.ninjadev.spawnvisualizer.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.ninjadev.spawnvisualizer.config.adapter.ResourceLocationAdapter;
 
 import java.io.*;
 import java.lang.reflect.Type;
 
 public abstract class Config {
 
-    private static final Gson GSON = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapterFactory(ResourceLocationAdapter.FACTORY)
+            .excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     protected File root = new File("config/SpawnVisualizer/");
     protected String extension = ".json";
 

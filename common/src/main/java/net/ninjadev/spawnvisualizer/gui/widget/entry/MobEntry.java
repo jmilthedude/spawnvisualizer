@@ -4,13 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.*;
 import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
 import net.ninjadev.spawnvisualizer.settings.SpawnSettings;
+import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 
 public class MobEntry extends Entry {
 
-    private final SpawnSettings validator;
+    private final SpawnValidator validator;
     private final ScrollingListWidget parent;
 
-    public MobEntry(int x, int y, SpawnSettings validator, ScrollingListWidget parent) {
+    public MobEntry(int x, int y, SpawnValidator validator, ScrollingListWidget parent) {
         super(x, y, Component.translatable(validator.getType().getDescriptionId()), parent);
         this.validator = validator;
         this.selected = validator.isEnabled();

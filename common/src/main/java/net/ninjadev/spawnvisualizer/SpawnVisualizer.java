@@ -3,7 +3,7 @@ package net.ninjadev.spawnvisualizer;
 
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModKeybinds;
-import net.ninjadev.spawnvisualizer.init.ModSpawnSettings;
+import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class SpawnVisualizer {
         SpawnVisualizer.LOGGER.info("Initialize Common");
         ModConfigs.init();
         ModKeybinds.init();
-        ModSpawnSettings.init();
+        ModSpawnValidators.init();
     }
 
 }
