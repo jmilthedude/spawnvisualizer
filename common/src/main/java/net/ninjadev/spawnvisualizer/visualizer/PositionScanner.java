@@ -6,7 +6,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
-import net.ninjadev.spawnvisualizer.settings.SpawnSettings;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 
 import java.awt.*;

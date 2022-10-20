@@ -3,7 +3,6 @@ package net.ninjadev.spawnvisualizer.gui.widget.entry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.*;
 import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
-import net.ninjadev.spawnvisualizer.settings.SpawnSettings;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 
 public class MobEntry extends Entry {
