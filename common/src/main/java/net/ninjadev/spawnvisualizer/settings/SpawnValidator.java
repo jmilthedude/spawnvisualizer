@@ -65,12 +65,13 @@ public class SpawnValidator {
         return config.getValidDimensions().contains(getWorldId(level));
     }
 
+    //whitelist [ soul sand valley ] - blacklist [ mushroom islands ]
     protected boolean validBiome(Level level, BlockPos pos) {
         ResourceLocation biomeId = level.getBiome(pos).unwrapKey().map(ResourceKey::location).orElse(null);
-        if (biomeId == null) return false;
-        if (config.getBlacklistedBiomes().contains(biomeId)) return false;
-        if (config.getWhitelistedBiomes().isEmpty() && !config.getBlacklistedBiomes().contains(biomeId)) return true;
-        return config.getWhitelistedBiomes().contains(biomeId);
+        if (biomeId == null) return false; // biomeId = plains
+        if (config.getBlacklistedBiomes(getWorldId(level)).contains(biomeId)) return false; // passes
+        if (config.getWhitelistedBiomes(getWorldId(level)).isEmpty() && !config.getBlacklistedBiomes(getWorldId(level)).contains(biomeId)) return true; // fails
+        return config.getWhitelistedBiomes(getWorldId(level)).contains(biomeId) || config.getBlacklistedBiomes(getWorldId(level)).contains(biomeId); //
     }
 
     protected boolean validPosition(Level world, BlockPos pos) {

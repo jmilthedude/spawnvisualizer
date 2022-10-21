@@ -148,12 +148,12 @@ public class MobSettingsConfig extends Config {
             return this;
         }
 
-        public List<ResourceLocation> getWhitelistedBiomes() {
-            return this.getDimensionEntries().stream().map(DimensionEntry::getBiomeWhitelist).flatMap(List::stream).toList();
+        public List<ResourceLocation> getWhitelistedBiomes(ResourceLocation worldId) {
+            return this.getDimensionEntries().stream().filter(entry -> entry.getId().equals(worldId)).map(DimensionEntry::getBiomeWhitelist).flatMap(List::stream).toList();
         }
 
-        public List<ResourceLocation> getBlacklistedBiomes() {
-            return this.getDimensionEntries().stream().map(DimensionEntry::getBiomeBlacklist).flatMap(List::stream).toList();
+        public List<ResourceLocation> getBlacklistedBiomes(ResourceLocation worldId) {
+            return this.getDimensionEntries().stream().filter(entry -> entry.getId().equals(worldId)).map(DimensionEntry::getBiomeBlacklist).flatMap(List::stream).toList();
         }
 
         public List<ResourceLocation> getValidDimensions() {
