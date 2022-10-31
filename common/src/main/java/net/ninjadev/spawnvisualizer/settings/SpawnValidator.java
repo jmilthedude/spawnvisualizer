@@ -9,11 +9,11 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.NaturalSpawner;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.ninjadev.spawnvisualizer.config.MobSettingsConfig;
 import net.ninjadev.spawnvisualizer.config.MobSettingsConfig.MobConfig;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
+import net.ninjadev.spawnvisualizer.util.SpawnUtils;
 
 import java.awt.*;
 
@@ -46,10 +46,20 @@ public class SpawnValidator {
 
     public boolean canSpawn(Level level, BlockPos pos) {
         if (this.getType().equals(EntityType.SLIME)) return canSlimeSpawn(level, pos);
+        if (this.getType().equals(EntityType.DROWNED)) {
+            if (!validDrownedSpawnHeight(level, pos)) return false;
+        }
         return validDimension(level)
                 && validBiome(level, pos)
                 && validPosition(level, pos)
                 && validLightLevel(level, pos);
+    }
+
+    private boolean validDrownedSpawnHeight(Level level, BlockPos pos) {
+        ResourceLocation biomeId = level.getBiome(pos).unwrapKey().map(ResourceKey::location).orElse(null);
+        if (biomeId == null || !SpawnUtils.isOceanBiome(biomeId)) return true;
+
+        return pos.getY() < 58;
     }
 
     private boolean canSlimeSpawn(Level level, BlockPos pos) {

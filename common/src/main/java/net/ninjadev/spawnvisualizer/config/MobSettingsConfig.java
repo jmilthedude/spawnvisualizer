@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
+import net.ninjadev.spawnvisualizer.util.SpawnUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,6 +119,15 @@ public class MobSettingsConfig extends Config {
                         .setMinimumLightLevel(11))
                 .setHexColor("6c7937");
         mobEntries.put(getEntityId(EntityType.ZOMBIFIED_PIGLIN), zombiePiglin);
+
+        MobConfig drowned = new MobConfig().setHexColor("6eb9a6");
+        DimensionEntry overworld = new DimensionEntry(Level.OVERWORLD.location())
+                .whitelistBiome(Biomes.RIVER.location())
+                .whitelistBiome(Biomes.DRIPSTONE_CAVES.location())
+                .setMinimumLightLevel(0);
+        overworld.getBiomeWhitelist().addAll(SpawnUtils.getOceanBiomes());
+        drowned.addDimensionEntry(overworld);
+        mobEntries.put(getEntityId(EntityType.DROWNED), drowned);
 
 
     }
