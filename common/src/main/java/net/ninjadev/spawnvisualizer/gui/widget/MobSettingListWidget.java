@@ -1,6 +1,6 @@
 package net.ninjadev.spawnvisualizer.gui.widget;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.MobEntry;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
@@ -20,16 +20,16 @@ public class MobSettingListWidget extends ScrollingListWidget {
     protected void init() {
         int buttonY = 5;
         int buttonHeight = 24;
-        List<ResourceLocation> keys = new ArrayList<>(ModConfigs.MOB_SETTINGS.getEntityIds());
+        List<Identifier> keys = new ArrayList<>(ModConfigs.MOB_SETTINGS.getEntityIds());
         Collections.sort(keys);
 
-        for (ResourceLocation key : keys) {
+        for (Identifier key : keys) {
             this.createButton(key, buttonY);
             buttonY += buttonHeight;
         }
     }
 
-    private void createButton(ResourceLocation id, int buttonY) {
+    private void createButton(Identifier id, int buttonY) {
         SpawnValidator validator = ModSpawnValidators.getValidator(id);
         MobEntry buttonEntry = new MobEntry((this.getBounds().width - scrollBarWidth) / 2 - 45, buttonY, validator, this);
         this.addEntry(buttonEntry);

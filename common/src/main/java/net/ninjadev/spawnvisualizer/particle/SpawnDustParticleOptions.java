@@ -4,21 +4,21 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.Mth;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.math.MathHelper;
 import net.ninjadev.spawnvisualizer.init.ModParticles;
 
 import java.util.Locale;
 
-public class SpawnDustParticleOptions implements ParticleOptions {
+public class SpawnDustParticleOptions implements ParticleEffect {
 
-    public static final Deserializer<SpawnDustParticleOptions> PARAMETERS_FACTORY = new Deserializer<>() {
+    public static final Factory<SpawnDustParticleOptions> PARAMETERS_FACTORY = new Factory<>() {
 
         @Override
-        public SpawnDustParticleOptions fromCommand(ParticleType<SpawnDustParticleOptions> type, StringReader reader) throws CommandSyntaxException {
+        public SpawnDustParticleOptions read(ParticleType<SpawnDustParticleOptions> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float red = (float) reader.readDouble();
             reader.expect(' ');
@@ -31,7 +31,7 @@ public class SpawnDustParticleOptions implements ParticleOptions {
         }
 
         @Override
-        public SpawnDustParticleOptions fromNetwork(ParticleType<SpawnDustParticleOptions> type, FriendlyByteBuf buf) {
+        public SpawnDustParticleOptions read(ParticleType<SpawnDustParticleOptions> type, PacketByteBuf buf) {
             float red = buf.readFloat();
             float green = buf.readFloat();
             float blue = buf.readFloat();
@@ -56,7 +56,7 @@ public class SpawnDustParticleOptions implements ParticleOptions {
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.scale = Mth.clamp(scale, 0.01f, 4.0f);
+        this.scale = MathHelper.clamp(scale, 0.01f, 4.0f);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class SpawnDustParticleOptions implements ParticleOptions {
     }
 
     @Override
-    public void writeToNetwork(FriendlyByteBuf buf) {
+    public void write(PacketByteBuf buf) {
         buf.writeFloat(this.red);
         buf.writeFloat(this.green);
         buf.writeFloat(this.blue);
@@ -73,9 +73,9 @@ public class SpawnDustParticleOptions implements ParticleOptions {
     }
 
     @Override
-    public String writeToString() {
+    public String asString() {
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f",
-                Registry.PARTICLE_TYPE.getId(this.getType()),
+                Registries.PARTICLE_TYPE.getId(this.getType()),
                 this.red, this.green, this.blue,
                 this.scale);
     }

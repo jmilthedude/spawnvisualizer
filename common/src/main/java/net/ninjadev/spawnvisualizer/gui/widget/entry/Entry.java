@@ -1,54 +1,57 @@
 package net.ninjadev.spawnvisualizer.gui.widget.entry;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
 
-import java.awt.*;
-
-public abstract class Entry extends AbstractWidget {
+public abstract class Entry extends ClickableWidget {
     public static final int BUTTON_WIDTH = 90;
     public static final int BUTTON_HEIGHT = 24;
     protected boolean selected;
     private ScrollingListWidget parent;
 
-    public Entry(int x, int y, Component message, ScrollingListWidget parent) {
+    public Entry(int x, int y, Text message, ScrollingListWidget parent) {
         super(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, message);
         this.parent = parent;
     }
 
-    @Override
-    public void updateNarration(NarrationElementOutput narrationElementOutput) {
-
-    }
-
     public boolean isHovered(int mouseX, int mouseY) {
-        return x <= mouseX && mouseX <= x + BUTTON_WIDTH
-                && y <= mouseY && mouseY <= y + BUTTON_HEIGHT;
+        return this.getX() <= mouseX && mouseX <= this.getX() + BUTTON_WIDTH
+                && this.getY() <= mouseY && mouseY <= this.getY() + BUTTON_HEIGHT;
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        Minecraft client = Minecraft.getInstance();
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        MinecraftClient client = MinecraftClient.getInstance();
 
         boolean isHovered = isHovered(mouseX, mouseY);
 
         RenderSystem.setShaderTexture(0, ConfigScreen.HUD_RESOURCE);
 
-        blit(matrices, x, y, 0, selected ? 24 : 48, BUTTON_WIDTH, BUTTON_HEIGHT, 256, 256);
+        drawTexture(matrices, this.getX(), this.getY(), 0, selected ? 24 : 48, BUTTON_WIDTH, BUTTON_HEIGHT, 256, 256);
 
 //        if (isHovered) {
 //            drawTexture(matrices, x, y, 0, 48, BUTTON_WIDTH, BUTTON_HEIGHT, 256, 256);
 //        }
 
         RenderSystem.disableDepthTest();
-        float startX = (x + (BUTTON_WIDTH / 2f) - (client.font.width(getMessage()) / 2f));
-        client.font.drawShadow(matrices, getMessage(), startX, y + 8, isHovered ? 0xFF_FFFF00 : 0xFF_FFFFFF);
+        float startX = (this.getX() + (BUTTON_WIDTH / 2f) - (client.textRenderer.getWidth(getMessage()) / 2f));
+        client.textRenderer.drawWithShadow(matrices, getMessage(), startX, this.getY() + 8, isHovered ? 0xFF_FFFF00 : 0xFF_FFFFFF);
         RenderSystem.enableDepthTest();
+    }
+
+    @Override
+    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+
+    }
+
+    @Override
+    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+
     }
 }

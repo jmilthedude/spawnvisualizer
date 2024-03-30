@@ -1,6 +1,6 @@
 
 modLoader="javafml" #mandatory
-loaderVersion="[43,)"
+loaderVersion="[45,)"
 license="MIT"
 [[mods]] #mandatory
 modId="spawnvisualizer" #mandatory
@@ -14,7 +14,7 @@ A client side only mod which allows you to visualize where various mobs can spaw
 [[dependencies.spawnvisualizer]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[43,)" #mandatory
+    versionRange="[45,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.spawnvisualizer]]

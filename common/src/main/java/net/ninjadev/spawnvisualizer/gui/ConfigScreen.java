@@ -1,10 +1,10 @@
 package net.ninjadev.spawnvisualizer.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.gui.widget.HorizontalRangeSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.MobSettingListWidget;
@@ -15,11 +15,11 @@ import org.lwjgl.glfw.GLFW;
 
 public class ConfigScreen extends Screen {
 
-    public static final ResourceLocation HUD_RESOURCE = new ResourceLocation(SpawnVisualizer.MODID, "textures/gui/config_screen.png");
+    public static final Identifier HUD_RESOURCE = new Identifier(SpawnVisualizer.MODID, "textures/gui/config_screen.png");
 
     private MobSettingListWidget mobList;
 
-    public ConfigScreen(Component title) {
+    public ConfigScreen(Text title) {
         super(title);
     }
 
@@ -28,22 +28,22 @@ public class ConfigScreen extends Screen {
         int buttonY = 40;
         int buttonHeight = 24;
 
-        OptionEntry enableButton = new OptionEntry(this.width / 2 - 45, buttonY, Component.nullToEmpty("Toggle On/Off"));
-        this.addRenderableWidget(enableButton);
+        OptionEntry enableButton = new OptionEntry(this.width / 2 - 45, buttonY, Text.of("Toggle On/Off"));
+        this.addDrawableChild(enableButton);
         buttonY += buttonHeight + 4;
 
         int horizontalRange = ModConfigs.GENERAL.getRangeHorizontal();
         HorizontalRangeSlider horizontal = new HorizontalRangeSlider(this.width / 2 - 45, buttonY, horizontalRange);
-        this.addRenderableWidget(horizontal);
+        this.addDrawableChild(horizontal);
         buttonY += buttonHeight;
 
         int verticalRange = ModConfigs.GENERAL.getRangeVertical();
         VerticalRangeSlider vertical = new VerticalRangeSlider(this.width / 2 - 45, buttonY, verticalRange);
-        this.addRenderableWidget(vertical);
+        this.addDrawableChild(vertical);
         buttonY += buttonHeight;
 
         mobList = new MobSettingListWidget((this.width / 2) - 50, buttonY, 100, this.height - buttonY - 15);
-        this.addRenderableOnly(mobList);
+        this.addDrawable(mobList);
     }
 
     @Override
@@ -79,9 +79,9 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        Screen.drawCenteredString(matrices, this.font, this.title, this.width / 2, 15, 0xFFFFFF);
+        Screen.drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
 
         super.render(matrices, mouseX, mouseY, delta);
     }
@@ -89,7 +89,7 @@ public class ConfigScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_M) {
-            Minecraft.getInstance().setScreen(null);
+            MinecraftClient.getInstance().setScreen(null);
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -97,13 +97,13 @@ public class ConfigScreen extends Screen {
 
 
     @Override
-    public boolean isPauseScreen() {
+    public boolean shouldPause() {
         return false;
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         ModConfigs.GENERAL.writeConfig();
-        super.onClose();
+        super.close();
     }
 }

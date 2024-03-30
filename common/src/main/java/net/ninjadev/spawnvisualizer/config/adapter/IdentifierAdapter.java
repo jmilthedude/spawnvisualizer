@@ -7,21 +7,21 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 
-public class ResourceLocationAdapter extends TypeAdapter<ResourceLocation> {
+public class IdentifierAdapter extends TypeAdapter<Identifier> {
 
     public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-            return type.getRawType() == ResourceLocation.class ? (TypeAdapter<T>) new ResourceLocationAdapter() : null;
+            return type.getRawType() == Identifier.class ? (TypeAdapter<T>) new IdentifierAdapter() : null;
         }
     };
 
     @Override
-    public void write(JsonWriter out, ResourceLocation value) throws IOException {
+    public void write(JsonWriter out, Identifier value) throws IOException {
         if (value == null) {
             out.nullValue();
             return;
@@ -30,12 +30,12 @@ public class ResourceLocationAdapter extends TypeAdapter<ResourceLocation> {
     }
 
     @Override
-    public ResourceLocation read(JsonReader in) throws IOException {
+    public Identifier read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
             return null;
         }
 
-        return new ResourceLocation(in.nextString());
+        return new Identifier(in.nextString());
     }
 }

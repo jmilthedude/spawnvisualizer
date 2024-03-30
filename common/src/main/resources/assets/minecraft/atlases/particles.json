@@ -1,0 +1,6 @@
+{
+    "replace": false,
+    "sources": [
+        { "type": "single", "resource": "spawnvisualizer:particle/spawn_dust" }
+    ]
+}

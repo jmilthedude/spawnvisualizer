@@ -1,8 +1,8 @@
 package net.ninjadev.spawnvisualizer.init;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
-import net.ninjadev.spawnvisualizer.settings.*;
+import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ModSpawnValidators {
 
-    private static final HashMap<ResourceLocation, SpawnValidator> validators = new HashMap<>();
+    private static final HashMap<Identifier, SpawnValidator> validators = new HashMap<>();
 
     public static void init() {
         SpawnVisualizer.LOGGER.info("Initialize Spawn Visualizer Validators");
@@ -20,7 +20,7 @@ public class ModSpawnValidators {
         });
     }
 
-    public static SpawnValidator getValidator(ResourceLocation id) {
+    public static SpawnValidator getValidator(Identifier id) {
         return validators.get(id);
     }
 

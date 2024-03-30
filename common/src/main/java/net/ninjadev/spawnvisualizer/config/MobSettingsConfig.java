@@ -1,11 +1,11 @@
 package net.ninjadev.spawnvisualizer.config;
 
 import com.google.gson.annotations.Expose;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeKeys;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 import net.ninjadev.spawnvisualizer.util.SpawnUtils;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MobSettingsConfig extends Config {
 
-    @Expose HashMap<ResourceLocation, MobConfig> mobEntries;
+    @Expose HashMap<Identifier, MobConfig> mobEntries;
 
     @Override
     public String getName() {
@@ -27,103 +27,103 @@ public class MobSettingsConfig extends Config {
         mobEntries = new HashMap<>();
 
         MobConfig creeper = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location()).blacklistBiome(Biomes.MUSHROOM_FIELDS.location()).setMinimumLightLevel(0))
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue()).blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue()).setMinimumLightLevel(0))
                 .setHexColor("c1fec1");
         mobEntries.put(getEntityId(EntityType.CREEPER), creeper);
 
         MobConfig skeleton = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location()).blacklistBiome(Biomes.MUSHROOM_FIELDS.location()).setMinimumLightLevel(0))
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location()).whitelistBiome(Biomes.SOUL_SAND_VALLEY.location()).setMinimumLightLevel(11))
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue()).blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue()).setMinimumLightLevel(0))
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue()).whitelistBiome(BiomeKeys.SOUL_SAND_VALLEY.getValue()).setMinimumLightLevel(11))
                 .setHexColor("eeeeee");
         mobEntries.put(getEntityId(EntityType.SKELETON), skeleton);
 
         MobConfig enderman = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location())
-                        .blacklistBiome(Biomes.MUSHROOM_FIELDS.location())
-                        .blacklistBiome(Biomes.DEEP_DARK.location())
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
+                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
+                        .blacklistBiome(BiomeKeys.DEEP_DARK.getValue())
                         .setMinimumLightLevel(0))
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location())
-                        .whitelistBiome(Biomes.SOUL_SAND_VALLEY.location())
-                        .whitelistBiome(Biomes.NETHER_WASTES.location())
-                        .whitelistBiome(Biomes.WARPED_FOREST.location())
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
+                        .whitelistBiome(BiomeKeys.SOUL_SAND_VALLEY.getValue())
+                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
+                        .whitelistBiome(BiomeKeys.WARPED_FOREST.getValue())
                         .setMinimumLightLevel(11))
-                .addDimensionEntry(new DimensionEntry(Level.END.location())
+                .addDimensionEntry(new DimensionEntry(World.END.getValue())
                         .setMinimumLightLevel(0))
                 .setHexColor("000000");
         mobEntries.put(getEntityId(EntityType.ENDERMAN), enderman);
 
         MobConfig ghast = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location())
-                        .whitelistBiome(Biomes.SOUL_SAND_VALLEY.location())
-                        .whitelistBiome(Biomes.NETHER_WASTES.location())
-                        .whitelistBiome(Biomes.BASALT_DELTAS.location())
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
+                        .whitelistBiome(BiomeKeys.SOUL_SAND_VALLEY.getValue())
+                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
+                        .whitelistBiome(BiomeKeys.BASALT_DELTAS.getValue())
                         .setMinimumLightLevel(15))
                 .setHexColor("ffffff");
         mobEntries.put(getEntityId(EntityType.GHAST), ghast);
 
         MobConfig hoglin = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location())
-                        .whitelistBiome(Biomes.NETHER_WASTES.location())
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
+                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
                         .setMinimumLightLevel(15))
                 .setHexColor("c68766");
         mobEntries.put(getEntityId(EntityType.HOGLIN), hoglin);
 
         MobConfig magmaCube = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location())
-                        .whitelistBiome(Biomes.NETHER_WASTES.location())
-                        .whitelistBiome(Biomes.BASALT_DELTAS.location())
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
+                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
+                        .whitelistBiome(BiomeKeys.BASALT_DELTAS.getValue())
                         .setMinimumLightLevel(15))
                 .setHexColor("ffa500");
         mobEntries.put(getEntityId(EntityType.MAGMA_CUBE), magmaCube);
 
         MobConfig piglin = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location())
-                        .whitelistBiome(Biomes.NETHER_WASTES.location())
-                        .whitelistBiome(Biomes.CRIMSON_FOREST.location())
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
+                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
+                        .whitelistBiome(BiomeKeys.CRIMSON_FOREST.getValue())
                         .setMinimumLightLevel(11))
                 .setHexColor("f0b985");
         mobEntries.put(getEntityId(EntityType.PIGLIN), piglin);
 
         MobConfig slime = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location())
-                        .whitelistBiome(Biomes.SWAMP.location())
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
+                        .whitelistBiome(BiomeKeys.SWAMP.getValue())
                         .setMinimumLightLevel(7))
                 .setHexColor("00ff00");
         mobEntries.put(getEntityId(EntityType.SLIME), slime);
 
         MobConfig spider = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location())
-                        .blacklistBiome(Biomes.MUSHROOM_FIELDS.location())
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
+                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
                         .setMinimumLightLevel(0))
                 .setHexColor("000000");
         mobEntries.put(getEntityId(EntityType.SPIDER), spider);
 
         MobConfig witch = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location())
-                        .blacklistBiome(Biomes.MUSHROOM_FIELDS.location())
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
+                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
                         .setMinimumLightLevel(0))
                 .setHexColor("30144f");
         mobEntries.put(getEntityId(EntityType.WITCH), witch);
 
         MobConfig zombie = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.OVERWORLD.location())
-                        .blacklistBiome(Biomes.MUSHROOM_FIELDS.location())
+                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
+                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
                         .setMinimumLightLevel(0))
                 .setHexColor("006600");
         mobEntries.put(getEntityId(EntityType.ZOMBIE), zombie);
 
         MobConfig zombiePiglin = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(Level.NETHER.location())
-                        .whitelistBiome(Biomes.NETHER_WASTES.location())
-                        .whitelistBiome(Biomes.CRIMSON_FOREST.location())
+                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
+                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
+                        .whitelistBiome(BiomeKeys.CRIMSON_FOREST.getValue())
                         .setMinimumLightLevel(11))
                 .setHexColor("6c7937");
         mobEntries.put(getEntityId(EntityType.ZOMBIFIED_PIGLIN), zombiePiglin);
 
         MobConfig drowned = new MobConfig().setHexColor("6eb9a6");
-        DimensionEntry overworld = new DimensionEntry(Level.OVERWORLD.location())
-                .whitelistBiome(Biomes.RIVER.location())
-                .whitelistBiome(Biomes.DRIPSTONE_CAVES.location())
+        DimensionEntry overworld = new DimensionEntry(World.OVERWORLD.getValue())
+                .whitelistBiome(BiomeKeys.RIVER.getValue())
+                .whitelistBiome(BiomeKeys.DRIPSTONE_CAVES.getValue())
                 .setMinimumLightLevel(0);
         overworld.getBiomeWhitelist().addAll(SpawnUtils.getOceanBiomes());
         drowned.addDimensionEntry(overworld);
@@ -132,16 +132,16 @@ public class MobSettingsConfig extends Config {
 
     }
 
-    public SpawnValidator getValidator(ResourceLocation id) {
-        return new SpawnValidator(Registry.ENTITY_TYPE.get(id), mobEntries.get(id));
+    public SpawnValidator getValidator(Identifier id) {
+        return new SpawnValidator(Registries.ENTITY_TYPE.get(id), mobEntries.get(id));
     }
 
-    public List<ResourceLocation> getEntityIds() {
+    public List<Identifier> getEntityIds() {
         return mobEntries.keySet().stream().toList();
     }
 
-    private ResourceLocation getEntityId(EntityType<?> type) {
-        return Registry.ENTITY_TYPE.getKey(type);
+    private Identifier getEntityId(EntityType<?> type) {
+        return Registries.ENTITY_TYPE.getId(type);
     }
 
     public static class MobConfig {
@@ -158,19 +158,19 @@ public class MobSettingsConfig extends Config {
             return this;
         }
 
-        public List<ResourceLocation> getWhitelistedBiomes(ResourceLocation worldId) {
+        public List<Identifier> getWhitelistedBiomes(Identifier worldId) {
             return this.getDimensionEntries().stream().filter(entry -> entry.getId().equals(worldId)).map(DimensionEntry::getBiomeWhitelist).flatMap(List::stream).toList();
         }
 
-        public List<ResourceLocation> getBlacklistedBiomes(ResourceLocation worldId) {
+        public List<Identifier> getBlacklistedBiomes(Identifier worldId) {
             return this.getDimensionEntries().stream().filter(entry -> entry.getId().equals(worldId)).map(DimensionEntry::getBiomeBlacklist).flatMap(List::stream).toList();
         }
 
-        public List<ResourceLocation> getValidDimensions() {
+        public List<Identifier> getValidDimensions() {
             return this.getDimensionEntries().stream().map(DimensionEntry::getId).toList();
         }
 
-        public int getLightLevelByDimension(ResourceLocation dimensionId) {
+        public int getLightLevelByDimension(Identifier dimensionId) {
             return this.getDimensionEntries()
                     .stream()
                     .filter(dimensionEntry -> dimensionEntry.id.equals(dimensionId))
@@ -189,12 +189,12 @@ public class MobSettingsConfig extends Config {
     }
 
     public static class DimensionEntry {
-        @Expose ResourceLocation id;
+        @Expose Identifier id;
         @Expose int minimumLightLevel;
-        @Expose List<ResourceLocation> biomeWhitelist = new ArrayList<>();
-        @Expose List<ResourceLocation> biomeBlacklist = new ArrayList<>();
+        @Expose List<Identifier> biomeWhitelist = new ArrayList<>();
+        @Expose List<Identifier> biomeBlacklist = new ArrayList<>();
 
-        public DimensionEntry(ResourceLocation id) {
+        public DimensionEntry(Identifier id) {
             this.id = id;
         }
 
@@ -203,17 +203,17 @@ public class MobSettingsConfig extends Config {
             return this;
         }
 
-        public DimensionEntry whitelistBiome(ResourceLocation id) {
+        public DimensionEntry whitelistBiome(Identifier id) {
             this.biomeWhitelist.add(id);
             return this;
         }
 
-        public DimensionEntry blacklistBiome(ResourceLocation id) {
+        public DimensionEntry blacklistBiome(Identifier id) {
             this.biomeBlacklist.add(id);
             return this;
         }
 
-        public ResourceLocation getId() {
+        public Identifier getId() {
             return id;
         }
 
@@ -221,11 +221,11 @@ public class MobSettingsConfig extends Config {
             return minimumLightLevel;
         }
 
-        public List<ResourceLocation> getBiomeWhitelist() {
+        public List<Identifier> getBiomeWhitelist() {
             return biomeWhitelist;
         }
 
-        public List<ResourceLocation> getBiomeBlacklist() {
+        public List<Identifier> getBiomeBlacklist() {
             return biomeBlacklist;
         }
     }

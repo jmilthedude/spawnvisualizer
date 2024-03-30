@@ -1,70 +1,90 @@
 package net.ninjadev.spawnvisualizer.particle;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.worldselection.EditGameRulesScreen;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.util.Mth;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
+import net.ninjadev.spawnvisualizer.SpawnVisualizer;
+import net.ninjadev.spawnvisualizer.init.ModParticles;
+
+import javax.annotation.Nonnull;
 
 public class SpawnDustParticle<T extends SpawnDustParticleOptions>
-        extends TextureSheetParticle {
+        extends SpriteBillboardParticle {
 
-    private final SpriteSet spriteProvider;
+    private final SpriteProvider spriteProvider;
 
-    public SpawnDustParticle(ClientLevel clientWorld, double x, double y, double z, T parameters, SpriteSet spriteProvider) {
+    public SpawnDustParticle(ClientWorld clientWorld, double x, double y, double z, T parameters, SpriteProvider spriteProvider) {
         super(clientWorld, x, y, z);
-        this.rCol = parameters.getRed();
-        this.gCol = parameters.getGreen();
-        this.bCol = parameters.getBlue();
-        this.quadSize *= 0.75f * parameters.getScale();
+        this.red = parameters.getRed();
+        this.green = parameters.getGreen();
+        this.blue = parameters.getBlue();
+        this.scale = .1f;
         this.spriteProvider = spriteProvider;
 
-        this.lifetime = 18;
+        this.maxAge = 25;
     }
 
     @Override
-    public void render(VertexConsumer vertexConsumer, Camera camera, float f) {
-        RenderSystem.setShader(GameRenderer::getParticleShader);
-        super.render(vertexConsumer, camera, f);
+    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float f) {
+        RenderSystem.setShader(GameRenderer::getParticleProgram);
+        super.buildGeometry(vertexConsumer, camera, f);
     }
 
     @Override
-    public float getQuadSize(float f) {
-        return this.quadSize * Mth.clamp(((float) this.lifetime + f) / (float) this.age * 32.0f, 0.0f, 1.0f);
+    public float getSize(float f) {
+        return this.scale * MathHelper.clamp(((float) this.maxAge + f) / (float) this.age * 32.0f, 0.0f, 1.0f);
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.setSpriteFromAge(this.spriteProvider);
+        this.setSpriteForAge(this.spriteProvider);
     }
 
     @Override
-    protected int getLightColor(float f) {
-        return LightTexture.FULL_BRIGHT;
+    protected int getBrightness(float f) {
+        return LightmapTextureManager.MAX_LIGHT_COORDINATE;
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_LIT;
+    public ParticleTextureSheet getType() {
+        return ParticleTextureSheet.PARTICLE_SHEET_LIT;
     }
 
-    public static class Provider implements ParticleProvider<SpawnDustParticleOptions> {
-        private final SpriteSet spriteProvider;
+    public static class Provider implements ParticleFactory<SpawnDustParticleOptions> {
+        private final SpriteProvider spriteProvider;
 
-        public Provider(SpriteSet spriteProvider) {
-            this.spriteProvider = spriteProvider;
+        public Provider() {
+            this.spriteProvider = new SpriteProvider() {
+
+                @Override
+                public Sprite getSprite(int age, int maxAge) {
+                    SpriteAtlasTexture texture = (SpriteAtlasTexture) MinecraftClient.getInstance().getTextureManager().getTexture(new Identifier("textures/atlas/particles.png"));
+                    return texture.getSprite(new Identifier(SpawnVisualizer.MODID, "particle/spawn_dust"));
+                }
+
+                @Override
+                public Sprite getSprite(Random random) {
+                    SpriteAtlasTexture texture = (SpriteAtlasTexture) MinecraftClient.getInstance().getTextureManager().getTexture(new Identifier("textures/atlas/particles.png"));
+                    return texture.getSprite(new Identifier(SpawnVisualizer.MODID, "particle/spawn_dust"));
+                }
+            };
         }
 
         @Override
-        public Particle createParticle(SpawnDustParticleOptions effect, ClientLevel clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+        public Particle createParticle(SpawnDustParticleOptions effect, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
             SpawnDustParticle<SpawnDustParticleOptions> particle = new SpawnDustParticle<>(clientWorld, x, y, z, effect, spriteProvider);
-            particle.pickSprite(this.spriteProvider);
+            particle.setSprite(this.spriteProvider);
             return particle;
         }
     }

@@ -1,8 +1,5 @@
 package net.ninjadev.spawnvisualizer.forge.init;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,6 +10,8 @@ import net.ninjadev.spawnvisualizer.particle.SpawnDustParticle;
 
 import static net.ninjadev.spawnvisualizer.init.ModParticles.SPAWN_DUST;
 
+import net.minecraft.util.Identifier;
+
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeParticles {
     static {
@@ -21,11 +20,11 @@ public class ForgeParticles {
 
     @SubscribeEvent
     public static void onParticleFactoryRegistry(RegisterParticleProvidersEvent event) {
-        event.register(SPAWN_DUST, SpawnDustParticle.Provider::new);
+        //event.registerSpecial(SPAWN_DUST, new SpawnDustParticle.Provider());
     }
 
     @SubscribeEvent
     public static void onParticleTypeRegistry(RegisterEvent event) {
-        event.register(ForgeRegistries.Keys.PARTICLE_TYPES , registry -> registry.register(new ResourceLocation(SpawnVisualizer.MODID, "spawn_dust"), SPAWN_DUST));
+        //event.register(ForgeRegistries.Keys.PARTICLE_TYPES , registry -> registry.register(new Identifier(SpawnVisualizer.MODID, "spawn_dust"), SPAWN_DUST));
     }
 }

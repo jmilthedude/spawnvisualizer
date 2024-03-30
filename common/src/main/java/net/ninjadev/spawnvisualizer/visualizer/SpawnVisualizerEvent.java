@@ -1,10 +1,9 @@
 package net.ninjadev.spawnvisualizer.visualizer;
 
-import net.minecraft.client.Minecraft;
-
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModKeybinds;
@@ -12,22 +11,22 @@ import net.ninjadev.spawnvisualizer.init.ModKeybinds;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
 
 public class SpawnVisualizerEvent {
 
     static HashMap<BlockPos, List<Color>> positions;
     static ParticleSpawner particleSpawner;
 
-    public static void tick(Minecraft minecraft) {
+    public static void tick(MinecraftClient minecraft) {
         checkKeyPresses(minecraft);
 
         if (!ModConfigs.GENERAL.isEnabled()) return;
 
-        ClientLevel level = minecraft.level;
+        ClientWorld level = minecraft.world;
         if (level == null) return;
 
-        if (level.getGameTime() % 25 != 0) return;
+        if (level.getTime() % 25 != 0) return;
 
         scanPositions();
         showParticles();
@@ -46,12 +45,12 @@ public class SpawnVisualizerEvent {
         }
     }
 
-    private static void checkKeyPresses(Minecraft minecraft) {
-        if (minecraft.screen != null) return;
-        while (ModKeybinds.OPEN_MENU.consumeClick()) {
-            minecraft.setScreen(new ConfigScreen(Component.nullToEmpty("Spawn Visualizer Options")));
+    private static void checkKeyPresses(MinecraftClient minecraft) {
+        if (minecraft.currentScreen != null) return;
+        while (ModKeybinds.OPEN_MENU.wasPressed()) {
+            minecraft.setScreen(new ConfigScreen(Text.of("Spawn Visualizer Options")));
         }
-        while (ModKeybinds.TOGGLE.consumeClick()) {
+        while (ModKeybinds.TOGGLE.wasPressed()) {
             if (!ModConfigs.GENERAL.toggleEnabled()) {
                 if (positions != null) positions.clear();
             }

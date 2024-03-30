@@ -1,15 +1,11 @@
 package net.ninjadev.spawnvisualizer.gui.widget.entry;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
-import net.ninjadev.spawnvisualizer.visualizer.SpawnVisualizerEvent;
+import net.minecraft.text.Text;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
-
-import java.util.Objects;
 
 public class OptionEntry extends Entry {
 
-    public OptionEntry(int x, int y, Component message) {
+    public OptionEntry(int x, int y, Text message) {
         super(x, y, message, null);
         this.selected = ModConfigs.GENERAL.isEnabled();
     }

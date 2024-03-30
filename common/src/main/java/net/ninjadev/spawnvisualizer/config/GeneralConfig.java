@@ -1,7 +1,7 @@
 package net.ninjadev.spawnvisualizer.config;
 
 import com.google.gson.annotations.Expose;
-import net.minecraft.util.Mth;
+import net.minecraft.util.math.MathHelper;
 
 public class GeneralConfig extends Config {
 
@@ -50,12 +50,12 @@ public class GeneralConfig extends Config {
     }
 
     public void setRangeHorizontal(double value) {
-        this.rangeHorizontal = (int) Math.round(Mth.clamp(value, 1, 32));
+        this.rangeHorizontal = (int) Math.round(MathHelper.clamp(value, 1, 32));
         this.markDirty();
     }
 
     public void setRangeVertical(double value) {
-        this.rangeVertical = (int) Math.round(Mth.clamp(value, 1, 32));
+        this.rangeVertical = (int) Math.round(MathHelper.clamp(value, 1, 32));
         this.markDirty();
     }
 }
