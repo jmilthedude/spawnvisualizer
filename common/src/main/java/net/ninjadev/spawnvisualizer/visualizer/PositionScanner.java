@@ -27,14 +27,12 @@ public class PositionScanner {
             for (int y = -ModConfigs.GENERAL.getRangeVertical(); y <= ModConfigs.GENERAL.getRangeVertical(); y++) {
                 for (int z = -ModConfigs.GENERAL.getRangeHorizontal(); z <= ModConfigs.GENERAL.getRangeHorizontal(); z++) {
                     BlockPos current = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                    ModSpawnValidators.getValidators()
-                            .stream()
-                            .filter(SpawnValidator::isEnabled)
-                            .filter(spawnValidator -> spawnValidator.canSpawn(level, current))
-                            .forEach(spawnSettings -> {
-                                List<Color> colors = spawnablePositions.computeIfAbsent(current, blockPos -> new ArrayList<>());
-                                colors.add(spawnSettings.getColor());
-                            });
+                    List<SpawnValidator> validators = ModSpawnValidators.getValidators();
+                    for (SpawnValidator validator : validators) {
+                        if (!validator.isEnabled()) continue;
+                        if (!validator.canSpawn(level, current)) continue;
+                        spawnablePositions.computeIfAbsent(current, blockPos -> new ArrayList<>()).add(validator.getColor());
+                    }
                 }
             }
         }

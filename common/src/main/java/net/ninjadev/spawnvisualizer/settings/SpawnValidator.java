@@ -85,7 +85,7 @@ public class SpawnValidator {
     protected boolean validPosition(World world, BlockPos pos) {
         if (SpawnHelper.canSpawn(SpawnRestriction.getLocation(this.getType()), world, pos, this.getType())) {
             Entity entity = this.getType().create(world);
-            return world.isSpaceEmpty(entity, this.getType().createSimpleBoundingBox((double) pos.getX() + 0.5, Math.floor(pos.getY()), (double) pos.getZ() + 0.5));
+            return world.isSpaceEmpty(entity, this.getType().createSimpleBoundingBox((double) pos.getX() + 0.5, pos.getY(), (double) pos.getZ() + 0.5));
         }
         return false;
     }
