@@ -26,7 +26,7 @@ public class SpawnVisualizerEvent {
         ClientWorld level = minecraft.world;
         if (level == null) return;
 
-        if (level.getTime() % 25 != 0) return;
+        if (level.getTime() % ModConfigs.GENERAL.getTicksBetweenScans() != 0) return;
 
         scanPositions();
         showParticles();

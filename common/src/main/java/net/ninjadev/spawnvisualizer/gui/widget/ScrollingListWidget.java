@@ -2,12 +2,13 @@ package net.ninjadev.spawnvisualizer.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.Entry;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class ScrollingListWidget extends DrawableHelper implements Drawable, Element {
+public abstract class ScrollingListWidget extends ClickableWidget {
 
     protected final Rectangle bounds;
     private final List<Entry> entries = new ArrayList<>();
@@ -32,6 +33,7 @@ public abstract class ScrollingListWidget extends DrawableHelper implements Draw
     private boolean focused;
 
     public ScrollingListWidget(int x, int y, int width, int height) {
+        super(x, y, width, height, Text.literal(""));
         this.bounds = new Rectangle(x, y, width + scrollBarWidth, height);
 
         init();
@@ -80,26 +82,25 @@ public abstract class ScrollingListWidget extends DrawableHelper implements Draw
         this.entries.add(entry);
     }
 
-
-
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        //drawBounds(matrices);
-
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         Rectangle renderableBounds = getRenderableBounds();
         Rectangle scrollBounds = getScrollbarBounds();
         Rectangle scrollableBounds = getScrollableBounds();
+        MatrixStack matrices = context.getMatrices();
 
-        renderOverflowHidden(matrices,
-                (ms) -> fill(ms, renderableBounds.x + 1, renderableBounds.y + 1, renderableBounds.x + renderableBounds.width, renderableBounds.y + renderableBounds.height, 0x01_000000),
-                (ms) -> {
+
+        renderOverflowHidden(context,
+                (ctx) -> ctx.fill(renderableBounds.x, renderableBounds.y, renderableBounds.x + renderableBounds.width + 1, renderableBounds.y + renderableBounds.height + 1, 0xFF_888888),
+                (ctx) -> {
+                    MatrixStack ms = ctx.getMatrices();
                     ms.push();
                     ms.translate(0, -yOffset, 0);
 
                     int containerX = mouseX - scrollableBounds.x;
                     int containerY = mouseY - scrollableBounds.y + yOffset;
 
-                    entries.forEach(entry -> entry.render(matrices, containerX, containerY, delta));
+                    entries.forEach(entry -> entry.renderWidget(ctx, containerX, containerY, delta));
                     ms.pop();
                 });
 
@@ -114,50 +115,49 @@ public abstract class ScrollingListWidget extends DrawableHelper implements Draw
             matrices.push();
             matrices.translate(scrollBounds.x, scrollBounds.y, 0);
             matrices.scale(1, scrollBounds.height, 1);
-            drawTexture(matrices, 1, 0, 0, 146, 8, 1);
+            context.drawTexture(ConfigScreen.HUD_RESOURCE, 1, 0, 0, 146, 8, 1);
             matrices.pop();
-            drawTexture(matrices, scrollBounds.x + 1, scrollBounds.y, 0, 145, 8, 1);
-            drawTexture(matrices, scrollBounds.x + 1, scrollBounds.y + scrollBounds.height, 0, 251, 8, 1);
+            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y, 0, 145, 8, 1);
+            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y + scrollBounds.height, 0, 251, 8, 1);
 
             int scrollU = scrolling ? 28 : scrollBounds.contains(mouseX, mouseY) ? 18 : 8;
 
             matrices.push();
             matrices.translate(0, (scrollBounds.getHeight() - scrollHeight) * scrollPercentage, 0);
-            drawTexture(matrices, scrollBounds.x + 1, scrollBounds.y,
+            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y,
                     scrollU, 104,
                     8, scrollHeight);
-            drawTexture(matrices, scrollBounds.x + 1, scrollBounds.y - 2,
+            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y - 2,
                     scrollU, 101,
                     8, 2);
-            drawTexture(matrices, scrollBounds.x + 1, scrollBounds.y + scrollHeight,
+            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y + scrollHeight,
                     scrollU, 253,
                     8, 2);
             matrices.pop();
         }
     }
 
-    private void renderOverflowHidden(MatrixStack matrices, Consumer<MatrixStack> backgroundRenderer, Consumer<MatrixStack> innerRenderer) {
+    @Override
+    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+
+    }
+
+    private void renderOverflowHidden(DrawContext context, Consumer<DrawContext> backgroundRenderer, Consumer<DrawContext> innerRenderer) {
+        MatrixStack matrices = context.getMatrices();
         matrices.push();
         RenderSystem.enableDepthTest();
 
         matrices.translate(0, 0, 950);
         RenderSystem.colorMask(false, false, false, false);
-        fill(matrices, 4680, 2260, -4680, -2260, 0xff_000000);
+        context.fill(-4680, -2260, 4680, this.getRenderableBounds().y, 0xff_000000);
+        context.fill(-4680, this.getRenderableBounds().y + this.getRenderableBounds().height + 1, 4680, 2260, 0xff_000000);
+        context.fill(-4680, -2260, this.getRenderableBounds().x, 2260, 0xff_000000);
+        context.fill(this.getRenderableBounds().x + this.getRenderableBounds().width, -2260, 4680, 2260, 0xff_000000);
         RenderSystem.colorMask(true, true, true, true);
         matrices.translate(0, 0, -950);
 
-        RenderSystem.depthFunc(GL11.GL_GEQUAL);
-        backgroundRenderer.accept(matrices);
-        RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        innerRenderer.accept(matrices);
-        RenderSystem.depthFunc(GL11.GL_GEQUAL);
-
-        matrices.translate(0, 0, -950);
-        RenderSystem.colorMask(false, false, false, false);
-        fill(matrices, 4680, 2260, -4680, -2260, 0xff_000000);
-        RenderSystem.colorMask(true, true, true, true);
-        matrices.translate(0, 0, 950);
-        RenderSystem.depthFunc(GL11.GL_LEQUAL);
+        backgroundRenderer.accept(context);
+        innerRenderer.accept(context);
 
         RenderSystem.disableDepthTest();
         matrices.pop();
@@ -177,13 +177,13 @@ public abstract class ScrollingListWidget extends DrawableHelper implements Draw
                 MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f));
             }
         }
-        return Element.super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         scrolling = false;
-        return Element.super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
@@ -199,17 +199,17 @@ public abstract class ScrollingListWidget extends DrawableHelper implements Draw
                     0,
                     scrollableBounds.height - renderableBounds.height + 2);
         }
-        return Element.super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         Rectangle scrollableBounds = getScrollableBounds();
         Rectangle renderableBounds = getRenderableBounds();
         float viewportRatio = (float) renderableBounds.getHeight() / scrollableBounds.height;
 
         if (viewportRatio < 1) {
-            yOffset = MathHelper.clamp(yOffset + (int) (-delta * 5),
+            yOffset = MathHelper.clamp(yOffset + (int) (-horizontalAmount * 5),
                     0,
                     scrollableBounds.height - renderableBounds.height + 2);
             return true;
@@ -222,21 +222,21 @@ public abstract class ScrollingListWidget extends DrawableHelper implements Draw
         return bounds.contains(mouseX, mouseY);
     }
 
-    private void drawBounds(MatrixStack matrices) {
+    private void drawBounds(DrawContext context) {
         // scroll
 
-        drawRectangle(matrices, getRenderableBounds(), 0xFF_00FFFF);
-        drawRectangle(matrices, getScrollableBounds(), 0xFF_FF0000);
-        drawRectangle(matrices, getScrollbarBounds(), 0xFF_00FF00);
+        drawRectangle(context, getRenderableBounds(), 0xFF_00FFFF);
+        drawRectangle(context, getScrollableBounds(), 0xFF_FF0000);
+        drawRectangle(context, getScrollbarBounds(), 0xFF_00FF00);
 
 
     }
 
-    private void drawRectangle(MatrixStack matrices, Rectangle bounds, int color) {
-        drawHorizontalLine(matrices, bounds.x, bounds.x + bounds.width, bounds.y, color);
-        drawHorizontalLine(matrices, bounds.x, bounds.x + bounds.width, bounds.y + bounds.height, color);
-        drawVerticalLine(matrices, bounds.x, bounds.y, bounds.y + bounds.height, color);
-        drawVerticalLine(matrices, bounds.x + bounds.width, bounds.y, bounds.y + bounds.height, color);
+    private void drawRectangle(DrawContext context, Rectangle bounds, int color) {
+        context.drawHorizontalLine(bounds.x, bounds.x + bounds.width, bounds.y, color);
+        context.drawHorizontalLine(bounds.x, bounds.x + bounds.width, bounds.y + bounds.height, color);
+        context.drawVerticalLine(bounds.x, bounds.y, bounds.y + bounds.height, color);
+        context.drawVerticalLine(bounds.x + bounds.width, bounds.y, bounds.y + bounds.height, color);
     }
 
 

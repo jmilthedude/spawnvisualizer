@@ -1,6 +1,7 @@
 package net.ninjadev.spawnvisualizer.gui;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -8,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.gui.widget.HorizontalRangeSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.MobSettingListWidget;
+import net.ninjadev.spawnvisualizer.gui.widget.TicksBetweenScansSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.VerticalRangeSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.OptionEntry;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
@@ -42,16 +44,21 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(vertical);
         buttonY += buttonHeight;
 
+        int scanRate = ModConfigs.GENERAL.getTicksBetweenScans();
+        TicksBetweenScansSlider ticks = new TicksBetweenScansSlider(this.width / 2 - 45, buttonY, scanRate);
+        this.addDrawableChild(ticks);
+        buttonY += buttonHeight;
+
         mobList = new MobSettingListWidget((this.width / 2) - 50, buttonY, 100, this.height - buttonY - 15);
         this.addDrawable(mobList);
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (mobList.isMouseOver(mouseX, mouseY)) {
-            return mobList.mouseScrolled(mouseX, mouseY, amount);
+            return mobList.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
         }
-        return super.mouseScrolled(mouseX, mouseY, amount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override
@@ -78,12 +85,13 @@ public class ConfigScreen extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        Screen.drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
 
-        super.render(matrices, mouseX, mouseY, delta);
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context, mouseX, mouseY, delta);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
+
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override

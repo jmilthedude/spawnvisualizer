@@ -14,9 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
-import net.ninjadev.spawnvisualizer.init.ModParticles;
-
-import javax.annotation.Nonnull;
+import net.ninjadev.spawnvisualizer.init.ModConfigs;
 
 public class SpawnDustParticle<T extends SpawnDustParticleOptions>
         extends SpriteBillboardParticle {
@@ -31,7 +29,7 @@ public class SpawnDustParticle<T extends SpawnDustParticleOptions>
         this.scale = .1f;
         this.spriteProvider = spriteProvider;
 
-        this.maxAge = 25;
+        this.maxAge = ModConfigs.GENERAL.getTicksBetweenScans();
     }
 
     @Override

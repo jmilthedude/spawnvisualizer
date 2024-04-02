@@ -3,14 +3,8 @@ package net.ninjadev.spawnvisualizer.forge.init;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
-import net.ninjadev.spawnvisualizer.particle.SpawnDustParticle;
-
-import static net.ninjadev.spawnvisualizer.init.ModParticles.SPAWN_DUST;
-
-import net.minecraft.util.Identifier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeParticles {

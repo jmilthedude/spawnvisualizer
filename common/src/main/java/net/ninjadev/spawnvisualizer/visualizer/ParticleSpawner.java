@@ -4,8 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.particle.SpawnDustParticleOptions;
 
 import java.awt.*;
