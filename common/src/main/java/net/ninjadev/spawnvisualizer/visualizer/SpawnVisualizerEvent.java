@@ -26,6 +26,7 @@ public class SpawnVisualizerEvent {
         ClientWorld level = minecraft.world;
         if (level == null) return;
 
+        if (ModConfigs.GENERAL.getTicksBetweenScans() <= 0 || ModConfigs.GENERAL.getTicksBetweenScans() > 60) ModConfigs.GENERAL.setTicksBetweenScans(20);
         if (level.getTime() % ModConfigs.GENERAL.getTicksBetweenScans() != 0) return;
 
         scanPositions();
