@@ -29,7 +29,7 @@ public class PositionScanner {
         }
 
         ClientWorld level = player.clientWorld;
-        BlockPos pos = player.getSteppingPos();
+        BlockPos pos = player.getBlockPos();
         for (int x = -ModConfigs.GENERAL.getRangeHorizontal(); x <= ModConfigs.GENERAL.getRangeHorizontal(); x++) {
             for (int y = -ModConfigs.GENERAL.getRangeVertical(); y <= ModConfigs.GENERAL.getRangeVertical(); y++) {
                 for (int z = -ModConfigs.GENERAL.getRangeHorizontal(); z <= ModConfigs.GENERAL.getRangeHorizontal(); z++) {
