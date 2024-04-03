@@ -1,10 +1,10 @@
 package net.ninjadev.spawnvisualizer.visualizer;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModKeybinds;
@@ -71,13 +71,23 @@ public class SpawnVisualizerEvent {
     private void checkKeyPresses(MinecraftClient minecraft) {
         if (minecraft.currentScreen != null) return;
         while (ModKeybinds.OPEN_MENU.wasPressed()) {
-            minecraft.setScreen(new ConfigScreen(Text.of("Spawn Visualizer Options")));
+            minecraft.setScreen(new ConfigScreen(Text.translatable("screen.spawnvisualizer.title")));
         }
         while (ModKeybinds.TOGGLE.wasPressed()) {
-            if (!ModConfigs.GENERAL.toggleEnabled()) {
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
+            boolean enabled = ModConfigs.GENERAL.toggleEnabled();
+            if (!enabled) {
                 if (positions != null) positions.clear();
+                sendFeedback(player, Text.translatable("chat.spawnvisualizer.disabled"));
+            } else {
+                sendFeedback(player, Text.translatable("chat.spawnvisualizer.enabled"));
             }
         }
+    }
+
+    private void sendFeedback(ClientPlayerEntity player, Text message) {
+        if (player == null) return;
+        player.sendMessage(message, true);
     }
 
 
