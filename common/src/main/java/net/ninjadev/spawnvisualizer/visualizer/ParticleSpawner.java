@@ -9,6 +9,8 @@ import net.ninjadev.spawnvisualizer.particle.SpawnDustParticleOptions;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParticleSpawner {
 
@@ -22,22 +24,23 @@ public class ParticleSpawner {
 
         //TODO: Add simple version for less particles
 
+        AtomicInteger index = new AtomicInteger(0);
         colors.forEach(color -> {
             Vec3d colorVec = Vec3d.unpackRgb(color.getRGB());
             SpawnDustParticleOptions particleData = new SpawnDustParticleOptions((float) colorVec.x, (float) colorVec.y, (float) colorVec.z, 1.5f);
 
             double width = .4D;
             double items = colors.size();
-            double index = colors.indexOf(color);
 
             double start = items == 1 ? 0.5D : (1 - width) / 2;
 
             double distance = items == 1 ? 0 : (width / (items - 1));
 
-            double x = pos.getX() + start + (index * distance);
-            double y = pos.getY() + .1d;
-            double z = pos.getZ() + start + (index * distance);
-            world.addImportantParticle(particleData, x, y, z, 0, 0, 0);
+            double x = pos.getX() + start + (index.get() * distance);
+            double y = pos.getY() + .2d;
+            double z = pos.getZ() + start + (index.get() * distance);
+            world.addImportantParticle(particleData, true, x, y, z, 0, 0, 0);
+            index.addAndGet(1);
         });
     }
 
