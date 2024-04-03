@@ -3,7 +3,9 @@ package net.ninjadev.spawnvisualizer.gui;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.widget.AbstractTextWidget;
+import net.minecraft.client.gui.widget.TextWidget;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
@@ -11,6 +13,7 @@ import net.ninjadev.spawnvisualizer.gui.widget.HorizontalRangeSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.MobSettingListWidget;
 import net.ninjadev.spawnvisualizer.gui.widget.TicksBetweenScansSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.VerticalRangeSlider;
+import net.ninjadev.spawnvisualizer.gui.widget.entry.Entry;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.OptionEntry;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import org.lwjgl.glfw.GLFW;
@@ -27,29 +30,38 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        int buttonY = 40;
+        int buttonY = 35;
         int buttonHeight = 24;
 
-        OptionEntry enableButton = new OptionEntry(this.width / 2 - 45, buttonY, Text.of("Toggle On/Off"));
+        int center = this.width / 2;
+        int centerButton = Entry.BUTTON_WIDTH / 2;
+
+        OptionEntry enableButton = new OptionEntry(center - Entry.BUTTON_WIDTH - 4, buttonY, Text.of("Toggle On/Off"));
         this.addDrawableChild(enableButton);
+
+        int scanRate = ModConfigs.GENERAL.getTicksBetweenScans();
+        TicksBetweenScansSlider ticks = new TicksBetweenScansSlider(center + 4, buttonY + 2, scanRate);
+        this.addDrawableChild(ticks);
         buttonY += buttonHeight + 4;
 
+        MutableText rangeText = Text.literal("Range");
+        int rangeWidth = this.textRenderer.getWidth(rangeText);
+        AbstractTextWidget rangeTextWidget = new TextWidget(center - rangeWidth / 2, buttonY, rangeWidth, 24, rangeText, textRenderer);
+        this.addDrawable(rangeTextWidget);
+        buttonY += buttonHeight - 4;
+
         int horizontalRange = ModConfigs.GENERAL.getRangeHorizontal();
-        HorizontalRangeSlider horizontal = new HorizontalRangeSlider(this.width / 2 - 45, buttonY, horizontalRange);
+        HorizontalRangeSlider horizontal = new HorizontalRangeSlider(center - Entry.BUTTON_WIDTH - 4, buttonY, horizontalRange);
         this.addDrawableChild(horizontal);
-        buttonY += buttonHeight;
 
         int verticalRange = ModConfigs.GENERAL.getRangeVertical();
-        VerticalRangeSlider vertical = new VerticalRangeSlider(this.width / 2 - 45, buttonY, verticalRange);
+        VerticalRangeSlider vertical = new VerticalRangeSlider(center + 4, buttonY, verticalRange);
         this.addDrawableChild(vertical);
         buttonY += buttonHeight;
 
-        int scanRate = ModConfigs.GENERAL.getTicksBetweenScans();
-        TicksBetweenScansSlider ticks = new TicksBetweenScansSlider(this.width / 2 - 45, buttonY, scanRate);
-        this.addDrawableChild(ticks);
-        buttonY += buttonHeight;
-
-        mobList = new MobSettingListWidget((this.width / 2) - 50, buttonY, 100, this.height - buttonY - 15);
+        int maxY = this.height - buttonY - 10;
+        int height = Math.min(maxY, (ModConfigs.MOB_SETTINGS.getEntityIds().size() * 24 / 2) + 20);
+        mobList = new MobSettingListWidget(center - 100, buttonY, 200, height);
         this.addDrawable(mobList);
     }
 
@@ -89,6 +101,8 @@ public class ConfigScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
+
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);

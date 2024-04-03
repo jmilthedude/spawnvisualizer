@@ -22,16 +22,21 @@ public class MobSettingListWidget extends ScrollingListWidget {
         int buttonHeight = 24;
         List<Identifier> keys = new ArrayList<>(ModConfigs.MOB_SETTINGS.getEntityIds());
         Collections.sort(keys);
-
+        int i = 0;
         for (Identifier key : keys) {
-            this.createButton(key, buttonY);
-            buttonY += buttonHeight;
+            boolean even = i % 2 == 0;
+            int buttonX = even ? (this.getBounds().width - scrollBarWidth) / 2 - 95 : (this.getBounds().width - scrollBarWidth) / 2 + 5;
+            this.createButton(key, buttonX, buttonY);
+            if (!even) {
+                buttonY += buttonHeight;
+            }
+            i++;
         }
     }
 
-    private void createButton(Identifier id, int buttonY) {
+    private void createButton(Identifier id, int buttonX, int buttonY) {
         SpawnValidator validator = ModSpawnValidators.getValidator(id);
-        MobEntry buttonEntry = new MobEntry((this.getBounds().width - scrollBarWidth) / 2 - 45, buttonY, validator, this);
+        MobEntry buttonEntry = new MobEntry(buttonX, buttonY, validator, this);
         this.addEntry(buttonEntry);
     }
 }

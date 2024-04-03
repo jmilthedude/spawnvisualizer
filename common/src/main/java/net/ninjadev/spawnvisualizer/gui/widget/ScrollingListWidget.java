@@ -56,7 +56,7 @@ public abstract class ScrollingListWidget extends ClickableWidget {
     }
 
     protected Rectangle getScrollableBounds() {
-        return new Rectangle(bounds.x, bounds.y, bounds.width - scrollBarWidth, 10 + (entries.size() * 24));
+        return new Rectangle(bounds.x, bounds.y, bounds.width - scrollBarWidth, 20 + (entries.size() * 24 / 2));
     }
 
     protected Rectangle getScrollbarBounds() {
@@ -171,13 +171,14 @@ public abstract class ScrollingListWidget extends ClickableWidget {
             scrolling = true;
             return true;
         }
-        for (Entry entry1 : entries) {
-            if (entry1.isHovered(MathHelper.floor(mouseX), MathHelper.floor(mouseY + yOffset))) {
-                entry1.mouseClicked(mouseX, mouseY + scrollingOffsetY, button);
-                MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f));
+        double translatedMouseX = mouseX - this.getBounds().x;
+        double translatedMouseY = mouseY + yOffset - this.getBounds().y;
+        for (Entry entry : entries) {
+            if (entry.isHovered(MathHelper.floor(translatedMouseX), MathHelper.floor(translatedMouseY))) {
+                return entry.mouseClicked(translatedMouseX, translatedMouseY + scrollingOffsetY, button);
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return false;
     }
 
     @Override
