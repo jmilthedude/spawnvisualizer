@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractTextWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
@@ -42,9 +43,9 @@ public class ConfigScreen extends Screen {
         int scanRate = ModConfigs.GENERAL.getTicksBetweenScans();
         TicksBetweenScansSlider ticks = new TicksBetweenScansSlider(center + 4, buttonY + 2, scanRate);
         this.addDrawableChild(ticks);
-        buttonY += buttonHeight + 4;
+        buttonY += buttonHeight;
 
-        MutableText rangeText = Text.literal("Range");
+        MutableText rangeText = Text.literal("  Range  ").setStyle(Style.EMPTY.withUnderline(true));
         int rangeWidth = this.textRenderer.getWidth(rangeText);
         AbstractTextWidget rangeTextWidget = new TextWidget(center - rangeWidth / 2, buttonY, rangeWidth, 24, rangeText, textRenderer);
         this.addDrawable(rangeTextWidget);
