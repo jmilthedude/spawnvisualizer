@@ -159,24 +159,36 @@ public class MobSettingsConfig extends Config {
         }
 
         public List<Identifier> getWhitelistedBiomes(Identifier worldId) {
-            return this.getDimensionEntries().stream().filter(entry -> entry.getId().equals(worldId)).map(DimensionEntry::getBiomeWhitelist).flatMap(List::stream).toList();
+            for (DimensionEntry dimensionEntry : this.getDimensionEntries()) {
+                if (!dimensionEntry.getId().equals(worldId)) continue;
+                return dimensionEntry.getBiomeWhitelist();
+            }
+            return new ArrayList<>();
         }
 
         public List<Identifier> getBlacklistedBiomes(Identifier worldId) {
-            return this.getDimensionEntries().stream().filter(entry -> entry.getId().equals(worldId)).map(DimensionEntry::getBiomeBlacklist).flatMap(List::stream).toList();
+            for (DimensionEntry dimensionEntry : this.getDimensionEntries()) {
+                if (!dimensionEntry.getId().equals(worldId)) continue;
+                return dimensionEntry.getBiomeBlacklist();
+            }
+            return new ArrayList<>();
         }
 
         public List<Identifier> getValidDimensions() {
-            return this.getDimensionEntries().stream().map(DimensionEntry::getId).toList();
+            List<Identifier> dimensionIds = new ArrayList<>();
+            for (DimensionEntry dimensionEntry : this.getDimensionEntries()) {
+                dimensionIds.add(dimensionEntry.getId());
+            }
+            return dimensionIds;
         }
 
         public int getLightLevelByDimension(Identifier dimensionId) {
-            return this.getDimensionEntries()
-                    .stream()
-                    .filter(dimensionEntry -> dimensionEntry.id.equals(dimensionId))
-                    .map(DimensionEntry::getMinimumLightLevel)
-                    .findFirst()
-                    .orElse(-1);
+            for (DimensionEntry dimensionEntry : this.getDimensionEntries()) {
+                if (dimensionEntry.getId().equals(dimensionId)) {
+                    return dimensionEntry.getMinimumLightLevel();
+                }
+            }
+            return -1;
         }
 
         private List<DimensionEntry> getDimensionEntries() {

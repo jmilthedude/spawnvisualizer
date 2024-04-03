@@ -7,8 +7,10 @@ import net.ninjadev.spawnvisualizer.visualizer.SpawnVisualizerEvent;
 
 public class FabricEvents {
 
+    private static final SpawnVisualizerEvent spawnVisualizerEvent = new SpawnVisualizerEvent();
+
     public static void init() {
         SpawnVisualizer.LOGGER.info("Initialize Fabric Events");
-        ClientTickEvents.END_CLIENT_TICK.register(SpawnVisualizerEvent::tick);
+        ClientTickEvents.END_CLIENT_TICK.register(spawnVisualizerEvent::tick);
     }
 }

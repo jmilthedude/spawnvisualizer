@@ -11,6 +11,8 @@ import net.ninjadev.spawnvisualizer.visualizer.SpawnVisualizerEvent;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeEvents {
 
+    private static final SpawnVisualizerEvent spawnVisualizerEvent = new SpawnVisualizerEvent();
+
     static {
         SpawnVisualizer.LOGGER.info("Initialize Forge Events");
     }
@@ -18,6 +20,6 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) return;
-        SpawnVisualizerEvent.tick(MinecraftClient.getInstance());
+        spawnVisualizerEvent.tick(MinecraftClient.getInstance());
     }
 }
