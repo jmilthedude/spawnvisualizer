@@ -2,6 +2,7 @@ package net.ninjadev.spawnvisualizer.config;
 
 import com.google.gson.annotations.Expose;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.gen.GeneratorOptions;
 
 public class GeneralConfig extends Config {
 
@@ -14,7 +15,7 @@ public class GeneralConfig extends Config {
     @Expose
     private int ticksBetweenScans;
     @Expose
-    private long seed;
+    private String seed;
 
     @Override
     public String getName() {
@@ -27,7 +28,7 @@ public class GeneralConfig extends Config {
         this.rangeHorizontal = 15;
         this.rangeVertical = 5;
         this.ticksBetweenScans = 20;
-        seed = 1234567890L;
+        seed = "0";
     }
 
     public int getRangeHorizontal() {
@@ -53,7 +54,11 @@ public class GeneralConfig extends Config {
     }
 
     public long getSeed() {
-        return seed;
+        return GeneratorOptions.parseSeed(this.seed).orElse(0);
+    }
+
+    public String getSeedString() {
+        return this.seed;
     }
 
     public void setRangeHorizontal(double value) {
@@ -68,6 +73,11 @@ public class GeneralConfig extends Config {
 
     public void setTicksBetweenScans(double value) {
         this.ticksBetweenScans = (int) Math.round(MathHelper.clamp(value, 1, 60));
+        this.markDirty();
+    }
+
+    public void setSeed(String seed) {
+        this.seed = seed;
         this.markDirty();
     }
 }

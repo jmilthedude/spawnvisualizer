@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractTextWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -58,6 +59,19 @@ public class ConfigScreen extends Screen {
         int verticalRange = ModConfigs.GENERAL.getRangeVertical();
         VerticalRangeSlider vertical = new VerticalRangeSlider(center + 4, buttonY, verticalRange);
         this.addDrawableChild(vertical);
+        buttonY += buttonHeight - 4;
+
+        MutableText seedText = Text.literal("  Seed  ").setStyle(Style.EMPTY.withUnderline(true));
+        int seedWidth = this.textRenderer.getWidth(seedText);
+        AbstractTextWidget seedTextWidget = new TextWidget(center - seedWidth / 2, buttonY, seedWidth, 24, seedText, textRenderer);
+        this.addDrawable(seedTextWidget);
+        buttonY += buttonHeight - 4;
+
+        String seed = ModConfigs.GENERAL.getSeedString();
+        TextFieldWidget seedWidget = new TextFieldWidget(this.textRenderer, center - 100, buttonY, 200, 20, seedText);
+        seedWidget.setText(seed);
+        seedWidget.setChangedListener(ModConfigs.GENERAL::setSeed);
+        this.addDrawableChild(seedWidget);
         buttonY += buttonHeight;
 
         int maxY = this.height - buttonY - 10;
