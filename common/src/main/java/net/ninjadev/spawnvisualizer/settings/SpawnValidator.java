@@ -2,7 +2,9 @@ package net.ninjadev.spawnvisualizer.settings;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -49,10 +51,21 @@ public class SpawnValidator {
         if (this.getType().equals(EntityType.DROWNED)) {
             if (!validDrownedSpawnHeight(level, pos)) return false;
         }
+        if (SpawnUtils.ANIMAL_ENTITIES.contains(this.getType())) {
+            if (!canAnimalSpawn(level, pos)) return false;
+        }
         return validDimension(level)
                 && validBiome(level, pos)
                 && validPosition(level, pos)
                 && validLightLevel(level, pos);
+    }
+
+    private boolean canAnimalSpawn(World level, BlockPos pos) {
+        if (AnimalEntity.isValidNaturalSpawn((EntityType<? extends AnimalEntity>) this.getType(), level, SpawnReason.NATURAL, pos, null)) {
+            return true;
+        }
+        int currentLight = Math.max(level.getLightLevel(LightType.BLOCK, pos), level.getLightLevel(LightType.SKY, pos));
+        return currentLight > 7;
     }
 
     private boolean validDrownedSpawnHeight(World level, BlockPos pos) {
