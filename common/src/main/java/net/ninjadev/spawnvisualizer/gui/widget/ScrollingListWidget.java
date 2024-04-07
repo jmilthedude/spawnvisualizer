@@ -210,7 +210,7 @@ public abstract class ScrollingListWidget extends ClickableWidget {
         float viewportRatio = (float) renderableBounds.getHeight() / scrollableBounds.height;
 
         if (viewportRatio < 1) {
-            yOffset = MathHelper.clamp(yOffset + (int) (-horizontalAmount * 5),
+            yOffset = MathHelper.clamp(yOffset + (int) (-verticalAmount * 5),
                     0,
                     scrollableBounds.height - renderableBounds.height + 2);
             return true;
