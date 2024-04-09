@@ -68,7 +68,6 @@ public class SpawnValidator {
                 }
                 SpawnSettings settings = level.getBiome(pos).value().getSpawnSettings();
 
-                long time = System.currentTimeMillis();
                 boolean canSpawnInBiome = false;
                 for (SpawnGroup spawnGroup : SpawnGroup.values()) {
                     for (SpawnSettings.SpawnEntry spawnEntry : settings.getSpawnEntries(spawnGroup).getEntries()) {
@@ -78,18 +77,8 @@ public class SpawnValidator {
                         }
                     }
                 }
-                long taken = System.currentTimeMillis() - time;
-                if (taken > 1) {
-                    System.out.println("Biome: " + taken);
-                }
-                time = System.currentTimeMillis();
                 if (!canSpawnInBiome) return false;
-                boolean test = spawnTest.test(this.getType(), level, SpawnReason.NATURAL, pos, Random.create());
-                taken = System.currentTimeMillis() - time;
-                if (taken > 1) {
-                    System.out.println("Test: " + taken);
-                }
-                return test;
+                return spawnTest.test(this.getType(), level, SpawnReason.NATURAL, pos, Random.create());
             }
         }
 

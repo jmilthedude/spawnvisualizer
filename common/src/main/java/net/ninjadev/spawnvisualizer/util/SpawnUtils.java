@@ -148,8 +148,8 @@ public class SpawnUtils {
 
     private static boolean isTodayAroundHalloween() {
         LocalDate localDate = LocalDate.now();
-        int i = localDate.get(ChronoField.DAY_OF_MONTH);
-        int j = localDate.get(ChronoField.MONTH_OF_YEAR);
-        return j == 10 && i >= 20 || j == 11 && i <= 3;
+        int dayOfMonth = localDate.getDayOfMonth();
+        int monthInt = localDate.getMonth().getValue();
+        return monthInt == 10 && dayOfMonth >= 20 || monthInt == 11 && dayOfMonth <= 3;
     }
 }
