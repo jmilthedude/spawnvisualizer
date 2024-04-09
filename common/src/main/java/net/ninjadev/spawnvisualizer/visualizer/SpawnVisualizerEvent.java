@@ -71,7 +71,7 @@ public class SpawnVisualizerEvent {
     private void checkKeyPresses(MinecraftClient minecraft) {
         if (minecraft.currentScreen != null) return;
         while (ModKeybinds.OPEN_MENU.wasPressed()) {
-            minecraft.setScreen(new ConfigScreen(Text.translatable("screen.spawnvisualizer.title")));
+            minecraft.setScreen(new ConfigScreen());
         }
         while (ModKeybinds.TOGGLE.wasPressed()) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;

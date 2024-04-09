@@ -224,7 +224,6 @@ public abstract class ScrollingListWidget extends ClickableWidget {
     }
 
     private void drawBounds(DrawContext context) {
-        // scroll
 
         drawRectangle(context, getRenderableBounds(), 0xFF_00FFFF);
         drawRectangle(context, getScrollableBounds(), 0xFF_FF0000);

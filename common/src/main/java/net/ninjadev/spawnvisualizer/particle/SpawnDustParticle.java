@@ -1,10 +1,8 @@
 package net.ninjadev.spawnvisualizer.particle;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.texture.Sprite;
@@ -34,7 +32,7 @@ public class SpawnDustParticle<T extends SpawnDustParticleOptions>
 
     @Override
     public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float f) {
-        RenderSystem.setShader(GameRenderer::getParticleProgram);
+        //RenderSystem.setShader(GameRenderer::getParticleProgram);
         super.buildGeometry(vertexConsumer, camera, f);
     }
 

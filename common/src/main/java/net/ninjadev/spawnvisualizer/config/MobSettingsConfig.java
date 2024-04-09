@@ -4,10 +4,7 @@ import com.google.gson.annotations.Expose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeKeys;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
-import net.ninjadev.spawnvisualizer.util.SpawnUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,110 +23,31 @@ public class MobSettingsConfig extends Config {
     protected void reset() {
         mobEntries = new HashMap<>();
 
-        MobConfig creeper = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue()).blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue()).setMinimumLightLevel(0))
-                .setHexColor("c1fec1");
-        mobEntries.put(getEntityId(EntityType.CREEPER), creeper);
-
-        MobConfig skeleton = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue()).blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue()).setMinimumLightLevel(0))
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue()).whitelistBiome(BiomeKeys.SOUL_SAND_VALLEY.getValue()).setMinimumLightLevel(11))
-                .setHexColor("eeeeee");
-        mobEntries.put(getEntityId(EntityType.SKELETON), skeleton);
-
-        MobConfig enderman = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
-                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
-                        .blacklistBiome(BiomeKeys.DEEP_DARK.getValue())
-                        .setMinimumLightLevel(0))
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
-                        .whitelistBiome(BiomeKeys.SOUL_SAND_VALLEY.getValue())
-                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
-                        .whitelistBiome(BiomeKeys.WARPED_FOREST.getValue())
-                        .setMinimumLightLevel(11))
-                .addDimensionEntry(new DimensionEntry(World.END.getValue())
-                        .setMinimumLightLevel(0))
-                .setHexColor("000000");
-        mobEntries.put(getEntityId(EntityType.ENDERMAN), enderman);
-
-        MobConfig ghast = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
-                        .whitelistBiome(BiomeKeys.SOUL_SAND_VALLEY.getValue())
-                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
-                        .whitelistBiome(BiomeKeys.BASALT_DELTAS.getValue())
-                        .setMinimumLightLevel(15))
-                .setHexColor("ffffff");
-        mobEntries.put(getEntityId(EntityType.GHAST), ghast);
-
-        MobConfig hoglin = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
-                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
-                        .setMinimumLightLevel(15))
-                .setHexColor("c68766");
-        mobEntries.put(getEntityId(EntityType.HOGLIN), hoglin);
-
-        MobConfig magmaCube = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
-                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
-                        .whitelistBiome(BiomeKeys.BASALT_DELTAS.getValue())
-                        .setMinimumLightLevel(15))
-                .setHexColor("ffa500");
-        mobEntries.put(getEntityId(EntityType.MAGMA_CUBE), magmaCube);
-
-        MobConfig piglin = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
-                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
-                        .whitelistBiome(BiomeKeys.CRIMSON_FOREST.getValue())
-                        .setMinimumLightLevel(11))
-                .setHexColor("f0b985");
-        mobEntries.put(getEntityId(EntityType.PIGLIN), piglin);
-
-        MobConfig slime = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
-                        .whitelistBiome(BiomeKeys.SWAMP.getValue())
-                        .setMinimumLightLevel(7))
-                .setHexColor("00ff00");
-        mobEntries.put(getEntityId(EntityType.SLIME), slime);
-
-        MobConfig spider = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
-                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
-                        .setMinimumLightLevel(0))
-                .setHexColor("000000");
-        mobEntries.put(getEntityId(EntityType.SPIDER), spider);
-
-        MobConfig witch = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
-                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
-                        .setMinimumLightLevel(0))
-                .setHexColor("30144f");
-        mobEntries.put(getEntityId(EntityType.WITCH), witch);
-
-        MobConfig zombie = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.OVERWORLD.getValue())
-                        .blacklistBiome(BiomeKeys.MUSHROOM_FIELDS.getValue())
-                        .setMinimumLightLevel(0))
-                .setHexColor("006600");
-        mobEntries.put(getEntityId(EntityType.ZOMBIE), zombie);
-
-        MobConfig zombiePiglin = new MobConfig()
-                .addDimensionEntry(new DimensionEntry(World.NETHER.getValue())
-                        .whitelistBiome(BiomeKeys.NETHER_WASTES.getValue())
-                        .whitelistBiome(BiomeKeys.CRIMSON_FOREST.getValue())
-                        .setMinimumLightLevel(11))
-                .setHexColor("6c7937");
-        mobEntries.put(getEntityId(EntityType.ZOMBIFIED_PIGLIN), zombiePiglin);
-
-        MobConfig drowned = new MobConfig().setHexColor("6eb9a6");
-        DimensionEntry overworld = new DimensionEntry(World.OVERWORLD.getValue())
-                .whitelistBiome(BiomeKeys.RIVER.getValue())
-                .whitelistBiome(BiomeKeys.DRIPSTONE_CAVES.getValue())
-                .setMinimumLightLevel(0);
-        overworld.getBiomeWhitelist().addAll(SpawnUtils.getOceanBiomes());
-        drowned.addDimensionEntry(overworld);
-        mobEntries.put(getEntityId(EntityType.DROWNED), drowned);
-
-
+        mobEntries.put(getEntityId(EntityType.AXOLOTL), new MobConfig().setHexColor("e088b9"));
+        mobEntries.put(getEntityId(EntityType.COD), new MobConfig().setHexColor("b1977b"));
+        mobEntries.put(getEntityId(EntityType.DOLPHIN), new MobConfig().setHexColor("aabcce"));
+        mobEntries.put(getEntityId(EntityType.DROWNED), new MobConfig().setHexColor("6eb9a6"));
+        mobEntries.put(getEntityId(EntityType.SQUID), new MobConfig().setHexColor("354758"));
+        mobEntries.put(getEntityId(EntityType.BAT), new MobConfig().setHexColor("2e2623"));
+        mobEntries.put(getEntityId(EntityType.BLAZE), new MobConfig().setHexColor("c08921"));
+        mobEntries.put(getEntityId(EntityType.ENDERMAN), new MobConfig().setHexColor("0f0f0f"));
+        mobEntries.put(getEntityId(EntityType.FROG), new MobConfig().setHexColor("638E2D"));
+        mobEntries.put(getEntityId(EntityType.GHAST), new MobConfig().setHexColor("e3e2e2"));
+        mobEntries.put(getEntityId(EntityType.GLOW_SQUID), new MobConfig().setHexColor("278680"));
+        mobEntries.put(getEntityId(EntityType.HUSK), new MobConfig().setHexColor("796a4a"));
+        mobEntries.put(getEntityId(EntityType.MAGMA_CUBE), new MobConfig().setHexColor("ffa500"));
+        mobEntries.put(getEntityId(EntityType.MOOSHROOM), new MobConfig().setHexColor("A31013"));
+        mobEntries.put(getEntityId(EntityType.HOGLIN), new MobConfig().setHexColor("b0775e"));
+        mobEntries.put(getEntityId(EntityType.PIGLIN), new MobConfig().setHexColor("f0b985"));
+        mobEntries.put(getEntityId(EntityType.SKELETON), new MobConfig().setHexColor("a8a7a7"));
+        mobEntries.put(getEntityId(EntityType.SLIME), new MobConfig().setHexColor("539144"));
+        mobEntries.put(getEntityId(EntityType.SPIDER), new MobConfig().setHexColor("393029"));
+        mobEntries.put(getEntityId(EntityType.STRAY), new MobConfig().setHexColor("99aaa9"));
+        mobEntries.put(getEntityId(EntityType.STRIDER), new MobConfig().setHexColor("7e3536"));
+        mobEntries.put(getEntityId(EntityType.WITCH), new MobConfig().setHexColor("30144f"));
+        mobEntries.put(getEntityId(EntityType.WITHER_SKELETON), new MobConfig().setHexColor("252626"));
+        mobEntries.put(getEntityId(EntityType.ZOMBIE), new MobConfig().setHexColor("006600"));
+        mobEntries.put(getEntityId(EntityType.ZOMBIFIED_PIGLIN), new MobConfig().setHexColor("ac7263"));
     }
 
     public SpawnValidator getValidator(Identifier id) {

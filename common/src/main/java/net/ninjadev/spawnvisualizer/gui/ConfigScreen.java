@@ -26,8 +26,8 @@ public class ConfigScreen extends Screen {
 
     private MobSettingListWidget mobList;
 
-    public ConfigScreen(Text title) {
-        super(title);
+    public ConfigScreen() {
+        super(Text.translatable("screen.spawnvisualizer.config.title"));
     }
 
     @Override

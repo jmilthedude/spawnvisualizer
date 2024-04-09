@@ -2,7 +2,8 @@
   "key.spawnvisualizer.toggle": "Toggle On/Off",
   "key.spawnvisualizer.open_menu": "Settings Menu",
   "category.spawnvisualizer.title": "Spawn Visualizer",
-  "screen.spawnvisualizer.title": "Spawn Visualizer Options",
+  "screen.spawnvisualizer.config.title": "Spawn Visualizer Options",
+  "screen.spawnvisualizer.validator.title": "Settings",
   "chat.spawnvisualizer.disabled": "Spawn Visualizer: Disabled",
   "chat.spawnvisualizer.enabled": "Spawn Visualizer: Enabled"
 }

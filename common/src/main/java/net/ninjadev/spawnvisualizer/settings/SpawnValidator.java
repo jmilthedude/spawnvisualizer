@@ -1,20 +1,22 @@
 package net.ninjadev.spawnvisualizer.settings;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.entity.*;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LightType;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.SpawnSettings;
 import net.ninjadev.spawnvisualizer.config.MobSettingsConfig;
 import net.ninjadev.spawnvisualizer.config.MobSettingsConfig.MobConfig;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
+import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
+import net.ninjadev.spawnvisualizer.util.SpawnTest;
 import net.ninjadev.spawnvisualizer.util.SpawnUtils;
 
 import java.awt.*;
@@ -24,6 +26,8 @@ public class SpawnValidator {
     private final EntityType<?> type;
     private final MobConfig config;
     private boolean enabled;
+
+    private MobEntity entity;
 
     public SpawnValidator(EntityType<?> type, MobSettingsConfig.MobConfig config) {
         this.type = type;
@@ -47,6 +51,48 @@ public class SpawnValidator {
     }
 
     public boolean canSpawn(World level, BlockPos pos) {
+
+        if (entity == null) {
+            entity = (MobEntity) this.getType().create(level);
+        }
+
+        if (entity != null) {
+            SpawnTest spawnTest = ModSpawnValidators.getSpawnTest(this.getType());
+            if (spawnTest != null) {
+                if (this.getType().getSpawnGroup() == SpawnGroup.MISC) return false;
+                if (!SpawnHelper.canSpawn(SpawnRestriction.getLocation(this.getType()), level, pos, this.getType())) {
+                    return false;
+                }
+                if (!level.isSpaceEmpty(this.getType().createSimpleBoundingBox((double) pos.getX() + 0.5, pos.getY(), (double) pos.getZ() + 0.5))) {
+                    return false;
+                }
+                SpawnSettings settings = level.getBiome(pos).value().getSpawnSettings();
+
+                long time = System.currentTimeMillis();
+                boolean canSpawnInBiome = false;
+                for (SpawnGroup spawnGroup : SpawnGroup.values()) {
+                    for (SpawnSettings.SpawnEntry spawnEntry : settings.getSpawnEntries(spawnGroup).getEntries()) {
+                        if (spawnEntry.type == this.getType()) {
+                            canSpawnInBiome = true;
+                            break;
+                        }
+                    }
+                }
+                long taken = System.currentTimeMillis() - time;
+                if (taken > 1) {
+                    System.out.println("Biome: " + taken);
+                }
+                time = System.currentTimeMillis();
+                if (!canSpawnInBiome) return false;
+                boolean test = spawnTest.test(this.getType(), level, SpawnReason.NATURAL, pos, Random.create());
+                taken = System.currentTimeMillis() - time;
+                if (taken > 1) {
+                    System.out.println("Test: " + taken);
+                }
+                return test;
+            }
+        }
+
         if (this.getType().equals(EntityType.SLIME)) return canSlimeSpawn(level, pos);
         if (this.getType().equals(EntityType.DROWNED)) {
             if (!validDrownedSpawnHeight(level, pos)) return false;
@@ -54,6 +100,7 @@ public class SpawnValidator {
         if (SpawnUtils.ANIMAL_ENTITIES.contains(this.getType())) {
             if (!canAnimalSpawn(level, pos)) return false;
         }
+
         return validDimension(level)
                 && validBiome(level, pos)
                 && validPosition(level, pos)
