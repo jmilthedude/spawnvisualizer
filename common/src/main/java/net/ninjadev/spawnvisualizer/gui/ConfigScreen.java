@@ -18,7 +18,7 @@ import net.ninjadev.spawnvisualizer.gui.widget.VerticalRangeSlider;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.Entry;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.OptionEntry;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
-import org.lwjgl.glfw.GLFW;
+import net.ninjadev.spawnvisualizer.init.ModKeybinds;
 
 public class ConfigScreen extends Screen {
 
@@ -36,7 +36,6 @@ public class ConfigScreen extends Screen {
         int buttonHeight = 24;
 
         int center = this.width / 2;
-        int centerButton = Entry.BUTTON_WIDTH / 2;
 
         OptionEntry enableButton = new OptionEntry(center - Entry.BUTTON_WIDTH - 4, buttonY, Text.translatable("screen.spawnvisualizer.config.toggle"), entry -> entry.setSelected(ModConfigs.GENERAL.toggleEnabled()));
 
@@ -118,15 +117,12 @@ public class ConfigScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
-
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
-
         super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_M) {
+        if (ModKeybinds.OPEN_MENU.matchesKey(keyCode, scanCode)) {
             MinecraftClient.getInstance().setScreen(null);
             return true;
         }

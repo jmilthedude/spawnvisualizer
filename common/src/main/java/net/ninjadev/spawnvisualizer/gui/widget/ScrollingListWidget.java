@@ -1,18 +1,14 @@
 package net.ninjadev.spawnvisualizer.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.Entry;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +22,6 @@ public abstract class ScrollingListWidget extends ClickableWidget {
     protected final int scrollBarWidth = 8;
     private boolean scrolling;
     protected int yOffset;
-    private double scrollAmount;
     protected double scrollingStartY;
     protected int scrollingOffsetY;
 
@@ -39,16 +34,8 @@ public abstract class ScrollingListWidget extends ClickableWidget {
         init();
     }
 
-    public int getYOffset() {
-        return yOffset;
-    }
-
     public boolean isScrolling() {
         return scrolling;
-    }
-
-    public List<Entry> getEntries() {
-        return entries;
     }
 
     protected Rectangle getRenderableBounds() {
@@ -69,11 +56,6 @@ public abstract class ScrollingListWidget extends ClickableWidget {
 
     private boolean isScrollbarClicked(double mouseX, double mouseY) {
         return getScrollbarBounds().contains(mouseX, mouseY);
-    }
-
-
-    public int getSize() {
-        return entries.size();
     }
 
     protected abstract void init();
@@ -175,7 +157,7 @@ public abstract class ScrollingListWidget extends ClickableWidget {
         double translatedMouseY = mouseY + yOffset - this.getBounds().y;
         for (Entry entry : entries) {
             if (entry.isHovered(MathHelper.floor(translatedMouseX), MathHelper.floor(translatedMouseY))) {
-                return entry.mouseClicked(translatedMouseX, translatedMouseY + scrollingOffsetY, button);
+                return entry.mouseClicked(translatedMouseX, translatedMouseY, button);
             }
         }
         return false;
@@ -222,23 +204,6 @@ public abstract class ScrollingListWidget extends ClickableWidget {
     public boolean isMouseOver(double mouseX, double mouseY) {
         return bounds.contains(mouseX, mouseY);
     }
-
-    private void drawBounds(DrawContext context) {
-
-        drawRectangle(context, getRenderableBounds(), 0xFF_00FFFF);
-        drawRectangle(context, getScrollableBounds(), 0xFF_FF0000);
-        drawRectangle(context, getScrollbarBounds(), 0xFF_00FF00);
-
-
-    }
-
-    private void drawRectangle(DrawContext context, Rectangle bounds, int color) {
-        context.drawHorizontalLine(bounds.x, bounds.x + bounds.width, bounds.y, color);
-        context.drawHorizontalLine(bounds.x, bounds.x + bounds.width, bounds.y + bounds.height, color);
-        context.drawVerticalLine(bounds.x, bounds.y, bounds.y + bounds.height, color);
-        context.drawVerticalLine(bounds.x + bounds.width, bounds.y, bounds.y + bounds.height, color);
-    }
-
 
     @Override
     public void setFocused(boolean focused) {

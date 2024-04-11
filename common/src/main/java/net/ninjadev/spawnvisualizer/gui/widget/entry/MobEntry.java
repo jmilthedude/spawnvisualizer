@@ -42,14 +42,8 @@ public class MobEntry extends Entry {
 
     @Override
     public boolean isHovered(int mouseX, int mouseY) {
-        boolean hovered = this.getX() - parent.getBounds().x <= mouseX && mouseX <= this.getX() - parent.getBounds().x + BUTTON_WIDTH
+        return this.getX() - parent.getBounds().x <= mouseX && mouseX <= this.getX() - parent.getBounds().x + BUTTON_WIDTH
                 && this.getY() - parent.getBounds().y <= mouseY && mouseY <= this.getY() - parent.getBounds().y + BUTTON_HEIGHT;
-
-        if (hovered) {
-            //SpawnVisualizer.LOGGER.info("{}: x={}, y={}, mouseX={}, mouseY={}", this.getMessage().getString(), this.getX(), this.getY(), mouseX, mouseY);
-        }
-
-        return hovered;
     }
 
     @Override
@@ -61,9 +55,5 @@ public class MobEntry extends Entry {
             context.drawVerticalLine(this.getX(), this.getY(), this.getY() + BUTTON_HEIGHT - 1, validator.getColor().getRGB());
             context.drawVerticalLine(this.getX() + BUTTON_WIDTH - 1, this.getY(), this.getY() + BUTTON_HEIGHT - 1, validator.getColor().getRGB());
         }
-    }
-
-    public ScrollingListWidget getParent() {
-        return parent;
     }
 }
