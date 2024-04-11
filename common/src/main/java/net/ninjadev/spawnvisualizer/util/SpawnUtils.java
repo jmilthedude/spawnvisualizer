@@ -107,7 +107,7 @@ public class SpawnUtils {
     }
 
     public static boolean canSlimeSpawn(EntityType<?> type, WorldAccess world, SpawnReason reason, BlockPos pos, Random random) {
-        if (world.getBiome(pos).isIn(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS) && pos.getY() > 50 && pos.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < world.getMoonSize() && world.getLightLevel(pos) <= random.nextInt(8)) {
+        if (world.getBiome(pos).isIn(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS) && pos.getY() > 50 && pos.getY() < 70 && world.getLightLevel(pos) <= 7) {
             return canMobSpawn(type, world, pos);
         }
         if (isSlimeChunk(world, pos) && pos.getY() < 40) {
