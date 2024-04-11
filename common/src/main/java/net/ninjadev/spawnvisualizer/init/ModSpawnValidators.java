@@ -4,9 +4,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.*;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
+import net.ninjadev.spawnvisualizer.util.BiomeUtils;
 import net.ninjadev.spawnvisualizer.util.SpawnTest;
 import net.ninjadev.spawnvisualizer.util.SpawnUtils;
 
@@ -18,6 +21,7 @@ public class ModSpawnValidators {
 
     private static final HashMap<Identifier, SpawnValidator> validators = new HashMap<>();
     private static final HashMap<EntityType<?>, SpawnTest<?>> spawnPredicates = new HashMap<>();
+    private static final HashMap<RegistryKey<Biome>, SpawnSettings> biomeSettings = new HashMap<>();
 
     public static void init() {
         SpawnVisualizer.LOGGER.info("Initialize Spawn Visualizer Validators");
@@ -98,6 +102,79 @@ public class ModSpawnValidators {
         registerSpawnTest(EntityType.VINDICATOR, SpawnUtils::canHostileSpawnInDark);
         registerSpawnTest(EntityType.WANDERING_TRADER, MobEntity::canMobSpawn);
         registerSpawnTest(EntityType.WARDEN, MobEntity::canMobSpawn);
+
+        registerBiomeSettings(BiomeKeys.THE_VOID, BiomeUtils.createTheVoid());
+        registerBiomeSettings(BiomeKeys.PLAINS, BiomeUtils.createPlains(false));
+        registerBiomeSettings(BiomeKeys.SUNFLOWER_PLAINS, BiomeUtils.createPlains(false));
+        registerBiomeSettings(BiomeKeys.SNOWY_PLAINS, BiomeUtils.createPlains(true));
+        registerBiomeSettings(BiomeKeys.ICE_SPIKES, BiomeUtils.createPlains(true));
+        registerBiomeSettings(BiomeKeys.DESERT, BiomeUtils.createDesert());
+        registerBiomeSettings(BiomeKeys.SWAMP, BiomeUtils.createSwamp());
+        registerBiomeSettings(BiomeKeys.MANGROVE_SWAMP, BiomeUtils.createMangroveSwamp());
+        registerBiomeSettings(BiomeKeys.FOREST, BiomeUtils.createNormalForest(false, false));
+        registerBiomeSettings(BiomeKeys.FLOWER_FOREST, BiomeUtils.createNormalForest(true, false));
+        registerBiomeSettings(BiomeKeys.BIRCH_FOREST, BiomeUtils.createNormalForest(false , true));
+        registerBiomeSettings(BiomeKeys.DARK_FOREST, BiomeUtils.createDarkForest());
+        registerBiomeSettings(BiomeKeys.OLD_GROWTH_BIRCH_FOREST, BiomeUtils.createNormalForest(false, true));
+        registerBiomeSettings(BiomeKeys.OLD_GROWTH_PINE_TAIGA, BiomeUtils.createOldGrowthTaiga(false));
+        registerBiomeSettings(BiomeKeys.OLD_GROWTH_SPRUCE_TAIGA, BiomeUtils.createOldGrowthTaiga(true));
+        registerBiomeSettings(BiomeKeys.TAIGA, BiomeUtils.createTaiga());
+        registerBiomeSettings(BiomeKeys.SNOWY_TAIGA, BiomeUtils.createTaiga());
+        registerBiomeSettings(BiomeKeys.SAVANNA, BiomeUtils.createSavanna(false));
+        registerBiomeSettings(BiomeKeys.SAVANNA_PLATEAU, BiomeUtils.createSavanna(true));
+        registerBiomeSettings(BiomeKeys.WINDSWEPT_HILLS, BiomeUtils.createWindsweptHills());
+        registerBiomeSettings(BiomeKeys.WINDSWEPT_GRAVELLY_HILLS, BiomeUtils.createWindsweptHills());
+        registerBiomeSettings(BiomeKeys.WINDSWEPT_FOREST, BiomeUtils.createWindsweptHills());
+        registerBiomeSettings(BiomeKeys.WINDSWEPT_SAVANNA, BiomeUtils.createSavanna(false));
+        registerBiomeSettings(BiomeKeys.JUNGLE, BiomeUtils.createJungle());
+        registerBiomeSettings(BiomeKeys.SPARSE_JUNGLE, BiomeUtils.createSparseJungle());
+        registerBiomeSettings(BiomeKeys.BAMBOO_JUNGLE, BiomeUtils.createNormalBambooJungle());
+        registerBiomeSettings(BiomeKeys.BADLANDS, BiomeUtils.createBadlands());
+        registerBiomeSettings(BiomeKeys.ERODED_BADLANDS, BiomeUtils.createBadlands());
+        registerBiomeSettings(BiomeKeys.WOODED_BADLANDS, BiomeUtils.createBadlands());
+        registerBiomeSettings(BiomeKeys.MEADOW, BiomeUtils.createMeadow(false));
+        registerBiomeSettings(BiomeKeys.CHERRY_GROVE, BiomeUtils.createMeadow(true));
+        registerBiomeSettings(BiomeKeys.GROVE, BiomeUtils.createGrove());
+        registerBiomeSettings(BiomeKeys.SNOWY_SLOPES, BiomeUtils.createSnowySlopes());
+        registerBiomeSettings(BiomeKeys.FROZEN_PEAKS, BiomeUtils.createFrozenPeaks());
+        registerBiomeSettings(BiomeKeys.JAGGED_PEAKS, BiomeUtils.createJaggedPeaks());
+        registerBiomeSettings(BiomeKeys.STONY_PEAKS, BiomeUtils.createStonyPeaks());
+        registerBiomeSettings(BiomeKeys.RIVER, BiomeUtils.createRiver(false));
+        registerBiomeSettings(BiomeKeys.FROZEN_RIVER, BiomeUtils.createRiver(true));
+        registerBiomeSettings(BiomeKeys.BEACH, BiomeUtils.createBeach(false, false));
+        registerBiomeSettings(BiomeKeys.SNOWY_BEACH, BiomeUtils.createBeach(true, false));
+        registerBiomeSettings(BiomeKeys.STONY_SHORE, BiomeUtils.createBeach(false, true));
+        registerBiomeSettings(BiomeKeys.WARM_OCEAN, BiomeUtils.createWarmOcean());
+        registerBiomeSettings(BiomeKeys.LUKEWARM_OCEAN, BiomeUtils.createLukewarmOcean(false));
+        registerBiomeSettings(BiomeKeys.DEEP_LUKEWARM_OCEAN, BiomeUtils.createLukewarmOcean(true));
+        registerBiomeSettings(BiomeKeys.OCEAN, BiomeUtils.createNormalOcean());
+        registerBiomeSettings(BiomeKeys.DEEP_OCEAN, BiomeUtils.createNormalOcean());
+        registerBiomeSettings(BiomeKeys.COLD_OCEAN, BiomeUtils.createColdOcean());
+        registerBiomeSettings(BiomeKeys.DEEP_COLD_OCEAN, BiomeUtils.createColdOcean());
+        registerBiomeSettings(BiomeKeys.FROZEN_OCEAN, BiomeUtils.createFrozenOcean());
+        registerBiomeSettings(BiomeKeys.DEEP_FROZEN_OCEAN, BiomeUtils.createFrozenOcean());
+        registerBiomeSettings(BiomeKeys.MUSHROOM_FIELDS, BiomeUtils.createMushroomFields());
+        registerBiomeSettings(BiomeKeys.DRIPSTONE_CAVES, BiomeUtils.createDripstoneCaves());
+        registerBiomeSettings(BiomeKeys.LUSH_CAVES, BiomeUtils.createLushCaves());
+        registerBiomeSettings(BiomeKeys.DEEP_DARK, BiomeUtils.createDeepDark());
+        registerBiomeSettings(BiomeKeys.NETHER_WASTES, BiomeUtils.createNetherWastes());
+        registerBiomeSettings(BiomeKeys.WARPED_FOREST, BiomeUtils.createWarpedForest());
+        registerBiomeSettings(BiomeKeys.CRIMSON_FOREST, BiomeUtils.createCrimsonForest());
+        registerBiomeSettings(BiomeKeys.SOUL_SAND_VALLEY, BiomeUtils.createSoulSandValley());
+        registerBiomeSettings(BiomeKeys.BASALT_DELTAS, BiomeUtils.createBasaltDeltas());
+        registerBiomeSettings(BiomeKeys.THE_END, BiomeUtils.createTheEnd());
+        registerBiomeSettings(BiomeKeys.END_HIGHLANDS, BiomeUtils.createTheEnd());
+        registerBiomeSettings(BiomeKeys.END_MIDLANDS, BiomeUtils.createTheEnd());
+        registerBiomeSettings(BiomeKeys.SMALL_END_ISLANDS, BiomeUtils.createTheEnd());
+        registerBiomeSettings(BiomeKeys.END_BARRENS, BiomeUtils.createTheEnd());
+    }
+
+    private static void registerBiomeSettings(RegistryKey<Biome> key, SpawnSettings settings) {
+        biomeSettings.put(key, settings);
+    }
+
+    public static SpawnSettings getSpawnSettingsForBiome(RegistryKey<Biome> biomeKey) {
+        return biomeSettings.get(biomeKey);
     }
 
     private static <T extends Entity> void registerSpawnTest(EntityType<T> type, SpawnTest<T> test) {

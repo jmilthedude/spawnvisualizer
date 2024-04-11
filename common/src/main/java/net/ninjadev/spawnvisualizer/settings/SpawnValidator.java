@@ -11,7 +11,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LightType;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.biome.*;
 import net.ninjadev.spawnvisualizer.config.entry.EntitySpawnSettings;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
@@ -73,8 +73,8 @@ public class SpawnValidator {
                 if (!level.isSpaceEmpty(this.getType().createSimpleBoundingBox((double) pos.getX() + 0.5, pos.getY(), (double) pos.getZ() + 0.5))) {
                     return false;
                 }
-                SpawnSettings settings = level.getBiome(pos).value().getSpawnSettings();
-
+                RegistryKey<Biome> biomeKey = level.getBiome(pos).getKey().orElse(BiomeKeys.THE_VOID);
+                SpawnSettings settings = ModSpawnValidators.getSpawnSettingsForBiome(biomeKey);
                 boolean canSpawnInBiome = false;
                 for (SpawnGroup spawnGroup : SpawnGroup.values()) {
                     for (SpawnSettings.SpawnEntry spawnEntry : settings.getSpawnEntries(spawnGroup).getEntries()) {
