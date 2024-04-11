@@ -19,7 +19,7 @@ public class GeneralConfig extends Config {
 
     @Override
     public String getName() {
-        return "General";
+        return "general";
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GeneralConfig extends Config {
 
     public boolean toggleEnabled() {
         this.enable = !this.enable;
-        this.markDirty();
+        this.writeConfig();
         return this.enable;
     }
 
@@ -63,21 +63,21 @@ public class GeneralConfig extends Config {
 
     public void setRangeHorizontal(double value) {
         this.rangeHorizontal = (int) Math.round(MathHelper.clamp(value, 1, 32));
-        this.markDirty();
+        this.writeConfig();
     }
 
     public void setRangeVertical(double value) {
         this.rangeVertical = (int) Math.round(MathHelper.clamp(value, 1, 32));
-        this.markDirty();
+        this.writeConfig();
     }
 
     public void setTicksBetweenScans(double value) {
         this.ticksBetweenScans = (int) Math.round(MathHelper.clamp(value, 1, 60));
-        this.markDirty();
+        this.writeConfig();
     }
 
     public void setSeed(String seed) {
         this.seed = seed;
-        this.markDirty();
+        this.writeConfig();
     }
 }

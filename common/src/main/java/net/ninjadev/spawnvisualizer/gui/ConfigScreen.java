@@ -38,7 +38,8 @@ public class ConfigScreen extends Screen {
         int center = this.width / 2;
         int centerButton = Entry.BUTTON_WIDTH / 2;
 
-        OptionEntry enableButton = new OptionEntry(center - Entry.BUTTON_WIDTH - 4, buttonY, Text.of("Toggle On/Off"));
+        OptionEntry enableButton = new OptionEntry(center - Entry.BUTTON_WIDTH - 4, buttonY, Text.translatable("screen.spawnvisualizer.config.toggle"), entry -> entry.setSelected(ModConfigs.GENERAL.toggleEnabled()));
+
         this.addDrawableChild(enableButton);
 
         int scanRate = ModConfigs.GENERAL.getTicksBetweenScans();
@@ -46,7 +47,7 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(ticks);
         buttonY += buttonHeight;
 
-        MutableText rangeText = Text.literal("  Range  ").setStyle(Style.EMPTY.withUnderline(true));
+        MutableText rangeText = Text.translatable("screen.spawnvisualizer.config.range").setStyle(Style.EMPTY.withUnderline(true));
         int rangeWidth = this.textRenderer.getWidth(rangeText);
         AbstractTextWidget rangeTextWidget = new TextWidget(center - rangeWidth / 2, buttonY, rangeWidth, 24, rangeText, textRenderer);
         this.addDrawable(rangeTextWidget);
@@ -61,7 +62,7 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(vertical);
         buttonY += buttonHeight - 4;
 
-        MutableText seedText = Text.literal("  Seed  ").setStyle(Style.EMPTY.withUnderline(true));
+        MutableText seedText = Text.translatable("screen.spawnvisualizer.config.seed").setStyle(Style.EMPTY.withUnderline(true));
         int seedWidth = this.textRenderer.getWidth(seedText);
         AbstractTextWidget seedTextWidget = new TextWidget(center - seedWidth / 2, buttonY, seedWidth, 24, seedText, textRenderer);
         this.addDrawable(seedTextWidget);
@@ -75,7 +76,7 @@ public class ConfigScreen extends Screen {
         buttonY += buttonHeight;
 
         int maxY = this.height - buttonY - 10;
-        int height = Math.min(maxY, (ModConfigs.MOB_SETTINGS.getEntityIds().size() * 24 / 2) + 20);
+        int height = Math.min(maxY, (ModConfigs.ENTITY_SETTINGS.getEntityIds().size() * 24 / 2) + 20);
         mobList = new MobSettingListWidget(center - 100, buttonY, 200, height);
         this.addDrawable(mobList);
     }
@@ -140,7 +141,7 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void close() {
-        ModConfigs.GENERAL.writeConfig();
+        ModConfigs.saveGeneral();
         super.close();
     }
 }

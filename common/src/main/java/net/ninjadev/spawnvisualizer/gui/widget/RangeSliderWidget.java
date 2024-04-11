@@ -6,13 +6,16 @@ import net.minecraft.util.math.MathHelper;
 
 public abstract class RangeSliderWidget extends SliderWidget {
 
-    private final double min;
-    private final double max;
+    private final Text prefix;
+    protected final double min;
+    protected final double max;
 
     public RangeSliderWidget(int x, int y, int width, int height, Text text, double value, double min, double max) {
-        super(x, y, width, height, text, value);
+        super(x, y, width, height, Text.empty(), value);
         this.min = min;
         this.max = max;
+        this.prefix = text.copy().append(": ");
+        this.updateMessage();
     }
 
     protected void setNewValue(double value) {
@@ -25,11 +28,23 @@ public abstract class RangeSliderWidget extends SliderWidget {
     }
 
     @Override
+    protected void updateMessage() {
+        this.setMessage(this.prefix.copy().append(this.getValueText()));
+    }
+
+    protected String getValueText() {
+        return String.valueOf((int) MathHelper.clamp(this.value * this.max, this.min, this.max));
+    }
+
+    @Override
     protected void onDrag(double mouseX, double mouseY, double deltaX, double deltaY) {
         this.setFromMouse(mouseX);
     }
 
     private void setFromMouse(double mouseX) {
-        this.setNewValue((mouseX - (double) (this.getX() + 4)) / (double) (this.width - 8));
+        double sliderLeft = (this.getX() + 4);
+        double sliderRight = (this.width - 8);
+        double value = (mouseX - sliderLeft) / sliderRight;
+        this.setNewValue(value);
     }
 }

@@ -15,11 +15,8 @@ public abstract class Config {
     protected File root = new File("config/SpawnVisualizer/");
     protected String extension = ".json";
 
-    private boolean isDirty = true;
-
     public void generateConfig() {
         this.reset();
-
         this.writeConfig();
     }
 
@@ -42,7 +39,6 @@ public abstract class Config {
     protected abstract void reset();
 
     public void writeConfig() {
-        if (!this.isDirty) return;
         try {
             if (!root.exists() && !root.mkdirs()) return;
             if (!this.getConfigFile().exists() && !this.getConfigFile().createNewFile()) return;
@@ -50,14 +46,8 @@ public abstract class Config {
             GSON.toJson(this, writer);
             writer.flush();
             writer.close();
-            this.isDirty = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public void markDirty() {
-        this.isDirty = true;
-    }
-
 }

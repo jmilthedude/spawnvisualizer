@@ -5,19 +5,44 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
-import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
-import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
+
+import java.util.function.Consumer;
 
 public abstract class Entry extends ClickableWidget {
     public static final int BUTTON_WIDTH = 90;
     public static final int BUTTON_HEIGHT = 24;
     protected boolean selected;
-    private ScrollingListWidget parent;
 
-    public Entry(int x, int y, Text message, ScrollingListWidget parent) {
+    private Consumer<Entry> onClick;
+
+    public Entry(int x, int y, Text message) {
+        this(x, y, message, entry -> {});
+    }
+
+    public Entry(int x, int y, Text message, Consumer<Entry> onClick) {
         super(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, message);
-        this.parent = parent;
+        this.onClick = onClick;
+    }
+
+    public <E extends Entry> E setSelected(boolean selected) {
+        this.selected = selected;
+        return (E) this;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public <E extends Entry> E setOnClick(Consumer<Entry> onClick) {
+        this.onClick = onClick;
+        return (E) this;
+    }
+
+    @Override
+    public void onClick(double mouseX, double mouseY) {
+        this.onClick.accept(this);
     }
 
     public boolean isHovered(int mouseX, int mouseY) {

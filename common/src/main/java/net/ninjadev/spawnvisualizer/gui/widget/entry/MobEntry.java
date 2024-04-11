@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.ninjadev.spawnvisualizer.gui.EntitySettingsScreen;
 import net.ninjadev.spawnvisualizer.gui.widget.ScrollingListWidget;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 
@@ -14,7 +15,7 @@ public class MobEntry extends Entry {
     private final ScrollingListWidget parent;
 
     public MobEntry(int x, int y, SpawnValidator validator, ScrollingListWidget parent) {
-        super(parent.getBounds().x + x, parent.getBounds().y + y, Text.translatable(validator.getType().getTranslationKey()), parent);
+        super(parent.getBounds().x + x, parent.getBounds().y + y, Text.translatable(validator.getType().getTranslationKey()));
         this.validator = validator;
         this.selected = validator.isEnabled();
         this.parent = parent;
@@ -29,8 +30,12 @@ public class MobEntry extends Entry {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.isHovered((int) mouseX, (int) mouseY)) return false;
-        validator.toggle();
-        this.selected = validator.isEnabled();
+        if(button == 0) {
+            validator.toggle();
+            this.selected = validator.isEnabled();
+        } else if(button == 1) {
+            MinecraftClient.getInstance().setScreen(new EntitySettingsScreen(this.validator));
+        }
         MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         return true;
     }

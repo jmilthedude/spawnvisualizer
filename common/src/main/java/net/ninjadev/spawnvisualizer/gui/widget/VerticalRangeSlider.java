@@ -8,18 +8,12 @@ import net.ninjadev.spawnvisualizer.init.ModConfigs;
 public class VerticalRangeSlider extends RangeSliderWidget {
 
     public VerticalRangeSlider(int x, int y, double value) {
-        super(x, y, Entry.BUTTON_WIDTH, Entry.BUTTON_HEIGHT - 4, Text.of("Vertical: " + value), value / 32d, 1, 32);
+        super(x, y, Entry.BUTTON_WIDTH, Entry.BUTTON_HEIGHT - 4, Text.translatable("screen.spawnvisualizer.config.vertical"), value / 32d, 1, 32);
         this.updateMessage();
     }
 
     @Override
-    protected void updateMessage() {
-        Text text = Text.of("Vertical: " + MathHelper.clamp(Math.round(value * 32d), 1, 32));
-        setMessage(text);
-    }
-
-    @Override
     protected void applyValue() {
-        ModConfigs.GENERAL.setRangeVertical(value * 32d);
+        ModConfigs.GENERAL.setRangeVertical(this.value * this.max);
     }
 }

@@ -3,15 +3,12 @@ package net.ninjadev.spawnvisualizer.gui.widget.entry;
 import net.minecraft.text.Text;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 
+import java.util.function.Consumer;
+
 public class OptionEntry extends Entry {
 
-    public OptionEntry(int x, int y, Text message) {
-        super(x, y, message, null);
+    public OptionEntry(int x, int y, Text message, Consumer<Entry> onClick) {
+        super(x, y, message, onClick);
         this.selected = ModConfigs.GENERAL.isEnabled();
-    }
-
-    @Override
-    public void onClick(double mouseX, double mouseY) {
-        this.selected = ModConfigs.GENERAL.toggleEnabled();
     }
 }

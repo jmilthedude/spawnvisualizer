@@ -8,18 +8,12 @@ import net.ninjadev.spawnvisualizer.init.ModConfigs;
 public class TicksBetweenScansSlider extends RangeSliderWidget {
 
     public TicksBetweenScansSlider(int x, int y, double value) {
-        super(x, y, Entry.BUTTON_WIDTH, Entry.BUTTON_HEIGHT - 4, Text.of("Interval: " + value), value / 60d, 1, 60);
+        super(x, y, Entry.BUTTON_WIDTH, Entry.BUTTON_HEIGHT - 4, Text.translatable("screen.spawnvisualizer.config.interval"), value / 60d, 1, 60);
         this.updateMessage();
     }
 
     @Override
-    protected void updateMessage() {
-        Text text = Text.of("Interval: " + MathHelper.clamp(Math.round(value * 60d), 1, 60));
-        setMessage(text);
-    }
-
-    @Override
     protected void applyValue() {
-        ModConfigs.GENERAL.setTicksBetweenScans(value * 60d);
+        ModConfigs.GENERAL.setTicksBetweenScans(this.value * this.max);
     }
 }

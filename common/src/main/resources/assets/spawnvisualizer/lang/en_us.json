@@ -5,5 +5,14 @@
   "screen.spawnvisualizer.config.title": "Spawn Visualizer Options",
   "screen.spawnvisualizer.validator.title": "Settings",
   "chat.spawnvisualizer.disabled": "Spawn Visualizer: Disabled",
-  "chat.spawnvisualizer.enabled": "Spawn Visualizer: Enabled"
+  "chat.spawnvisualizer.enabled": "Spawn Visualizer: Enabled",
+  "screen.spawnvisualizer.config.hue": "Hue",
+  "screen.spawnvisualizer.config.saturation": "Saturation",
+  "screen.spawnvisualizer.config.brightness": "Brightness",
+  "screen.spawnvisualizer.config.toggle": "Toggle On/Off",
+  "screen.spawnvisualizer.config.range": "Range",
+  "screen.spawnvisualizer.config.horizontal": "Horizontal",
+  "screen.spawnvisualizer.config.vertical": "Vertical",
+  "screen.spawnvisualizer.config.interval": "Interval",
+  "screen.spawnvisualizer.config.seed": "Seed"
 }

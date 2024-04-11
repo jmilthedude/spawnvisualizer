@@ -12,8 +12,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.SpawnSettings;
-import net.ninjadev.spawnvisualizer.config.MobSettingsConfig;
-import net.ninjadev.spawnvisualizer.config.MobSettingsConfig.MobConfig;
+import net.ninjadev.spawnvisualizer.config.entry.EntitySpawnSettings;
 import net.ninjadev.spawnvisualizer.init.ModConfigs;
 import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
 import net.ninjadev.spawnvisualizer.util.SpawnTest;
@@ -24,18 +23,22 @@ import java.awt.*;
 public class SpawnValidator {
 
     private final EntityType<?> type;
-    private final MobConfig config;
+    private final EntitySpawnSettings config;
     private boolean enabled;
 
     private MobEntity entity;
 
-    public SpawnValidator(EntityType<?> type, MobSettingsConfig.MobConfig config) {
+    public SpawnValidator(EntityType<?> type, EntitySpawnSettings config) {
         this.type = type;
         this.config = config;
     }
 
     public EntityType<?> getType() {
         return type;
+    }
+
+    public EntitySpawnSettings getConfig() {
+        return config;
     }
 
     public void toggle() {
@@ -48,6 +51,10 @@ public class SpawnValidator {
 
     public Color getColor() {
         return Color.decode("#" + config.getHexColor());
+    }
+    public void setColorInt(int color) {
+        Color colorObj = new Color(color, false);
+        this.config.setHexColor(String.format("%02x%02x%02x", colorObj.getRed(), colorObj.getGreen(), colorObj.getBlue()));
     }
 
     public boolean canSpawn(World level, BlockPos pos) {
@@ -151,6 +158,10 @@ public class SpawnValidator {
 
     public static boolean isSlimeChunk(World world, BlockPos pos) {
         return ChunkRandom.getSlimeRandom(world.getChunk(pos).getPos().x, world.getChunk(pos).getPos().z, ModConfigs.GENERAL.getSeed(), 987234911L).nextInt(10) == 0;
+    }
+
+    public SpawnValidator copy() {
+        return new SpawnValidator(this.getType(), this.config.copy());
     }
 
 }

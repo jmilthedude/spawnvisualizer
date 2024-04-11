@@ -1,15 +1,10 @@
 package net.ninjadev.spawnvisualizer.init;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.Heightmap;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 import net.ninjadev.spawnvisualizer.util.SpawnTest;
@@ -26,8 +21,8 @@ public class ModSpawnValidators {
 
     public static void init() {
         SpawnVisualizer.LOGGER.info("Initialize Spawn Visualizer Validators");
-        ModConfigs.MOB_SETTINGS.getEntityIds().forEach(id -> {
-            SpawnValidator validator = ModConfigs.MOB_SETTINGS.getValidator(id);
+        ModConfigs.ENTITY_SETTINGS.getEntityIds().forEach(id -> {
+            SpawnValidator validator = ModConfigs.ENTITY_SETTINGS.createValidator(id);
             validators.put(id, validator);
         });
 
@@ -111,6 +106,10 @@ public class ModSpawnValidators {
 
     public static SpawnValidator getValidator(Identifier id) {
         return validators.get(id);
+    }
+
+    public static void updateValidator(Identifier id, SpawnValidator validator) {
+        validators.put(id, validator);
     }
 
     public static List<SpawnValidator> getValidators() {

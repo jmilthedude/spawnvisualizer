@@ -20,7 +20,7 @@ public class MobSettingListWidget extends ScrollingListWidget {
     protected void init() {
         int buttonY = 5;
         int buttonHeight = 24;
-        List<Identifier> keys = new ArrayList<>(ModConfigs.MOB_SETTINGS.getEntityIds());
+        List<Identifier> keys = new ArrayList<>(ModConfigs.ENTITY_SETTINGS.getEntityIds());
         Collections.sort(keys);
         int i = 0;
         for (Identifier key : keys) {
