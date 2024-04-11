@@ -26,6 +26,7 @@ public class EntitySettingsConfig extends Config {
 
         entitySettings.put(getEntityId(EntityType.AXOLOTL), new EntitySpawnSettings().setHexColor("e088b9"));
         entitySettings.put(getEntityId(EntityType.COD), new EntitySpawnSettings().setHexColor("b1977b"));
+        entitySettings.put(getEntityId(EntityType.CREEPER), new EntitySpawnSettings().setHexColor("c1fec1"));
         entitySettings.put(getEntityId(EntityType.DOLPHIN), new EntitySpawnSettings().setHexColor("aabcce"));
         entitySettings.put(getEntityId(EntityType.DROWNED), new EntitySpawnSettings().setHexColor("6eb9a6"));
         entitySettings.put(getEntityId(EntityType.SQUID), new EntitySpawnSettings().setHexColor("354758"));
