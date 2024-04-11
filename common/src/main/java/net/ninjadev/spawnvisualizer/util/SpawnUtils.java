@@ -110,7 +110,7 @@ public class SpawnUtils {
         if (world.getBiome(pos).isIn(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS) && pos.getY() > 50 && pos.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < world.getMoonSize() && world.getLightLevel(pos) <= random.nextInt(8)) {
             return canMobSpawn(type, world, pos);
         }
-        if (isSlimeChunk(world, pos)) {
+        if (isSlimeChunk(world, pos) && pos.getY() < 40) {
             return canMobSpawn(type, world, pos);
         }
         return false;
