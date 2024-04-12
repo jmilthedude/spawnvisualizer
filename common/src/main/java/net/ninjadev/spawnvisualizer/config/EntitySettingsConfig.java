@@ -3,7 +3,11 @@ package net.ninjadev.spawnvisualizer.config;
 import com.google.gson.annotations.Expose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.config.entry.EntitySpawnSettings;
 import net.ninjadev.spawnvisualizer.init.ModSpawnValidators;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
@@ -53,7 +57,15 @@ public class EntitySettingsConfig extends Config {
     }
 
     public SpawnValidator createValidator(Identifier id) {
-        return new SpawnValidator(Registries.ENTITY_TYPE.get(id), entitySettings.get(id));
+        EntityType<?> type = Registries.ENTITY_TYPE.get(id);
+
+        Identifier entityTypeId = Registries.ENTITY_TYPE.getId(type);
+        if (!id.equals(entityTypeId)) {
+            SpawnVisualizer.LOGGER.warn("'{}' is not a valid entity type. Correct the 'entity_spawn_settings.json' config file.", id);
+            return null;
+        }
+
+        return new SpawnValidator(type, entitySettings.get(id));
     }
 
     public List<Identifier> getEntityIds() {
@@ -67,7 +79,9 @@ public class EntitySettingsConfig extends Config {
     public void resetSettings(EntityType<?> type, EntitySpawnSettings config) {
         Identifier entityId = this.getEntityId(type);
         entitySettings.put(entityId, config);
-        ModSpawnValidators.updateValidator(entityId, this.createValidator(entityId));
+        SpawnValidator validator = this.createValidator(entityId);
+        if (validator == null) return;
+        ModSpawnValidators.updateValidator(entityId, validator);
         this.writeConfig();
     }
 }

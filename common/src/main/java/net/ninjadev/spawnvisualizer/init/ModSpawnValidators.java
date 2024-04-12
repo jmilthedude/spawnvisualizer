@@ -6,7 +6,9 @@ import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.*;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.biome.SpawnSettings;
 import net.ninjadev.spawnvisualizer.SpawnVisualizer;
 import net.ninjadev.spawnvisualizer.settings.SpawnValidator;
 import net.ninjadev.spawnvisualizer.util.BiomeUtils;
@@ -27,6 +29,7 @@ public class ModSpawnValidators {
         SpawnVisualizer.LOGGER.info("Initialize Spawn Visualizer Validators");
         ModConfigs.ENTITY_SETTINGS.getEntityIds().forEach(id -> {
             SpawnValidator validator = ModConfigs.ENTITY_SETTINGS.createValidator(id);
+            if (validator == null) return;
             validators.put(id, validator);
         });
 
@@ -113,7 +116,7 @@ public class ModSpawnValidators {
         registerBiomeSettings(BiomeKeys.MANGROVE_SWAMP, BiomeUtils.createMangroveSwamp());
         registerBiomeSettings(BiomeKeys.FOREST, BiomeUtils.createNormalForest(false, false));
         registerBiomeSettings(BiomeKeys.FLOWER_FOREST, BiomeUtils.createNormalForest(true, false));
-        registerBiomeSettings(BiomeKeys.BIRCH_FOREST, BiomeUtils.createNormalForest(false , true));
+        registerBiomeSettings(BiomeKeys.BIRCH_FOREST, BiomeUtils.createNormalForest(false, true));
         registerBiomeSettings(BiomeKeys.DARK_FOREST, BiomeUtils.createDarkForest());
         registerBiomeSettings(BiomeKeys.OLD_GROWTH_BIRCH_FOREST, BiomeUtils.createNormalForest(false, true));
         registerBiomeSettings(BiomeKeys.OLD_GROWTH_PINE_TAIGA, BiomeUtils.createOldGrowthTaiga(false));
