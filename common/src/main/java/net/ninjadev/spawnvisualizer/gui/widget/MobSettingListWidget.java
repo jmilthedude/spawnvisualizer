@@ -20,7 +20,7 @@ public class MobSettingListWidget extends ScrollingListWidget {
     protected void init() {
         int buttonY = 5;
         int buttonHeight = 24;
-        List<Identifier> keys = new ArrayList<>(ModConfigs.ENTITY_SETTINGS.getEntityIds());
+        List<Identifier> keys = new ArrayList<>(ModSpawnValidators.getValidatorMap().keySet());
         Collections.sort(keys);
         int i = 0;
         for (Identifier key : keys) {
@@ -34,8 +34,8 @@ public class MobSettingListWidget extends ScrollingListWidget {
         }
     }
 
-    private void createButton(Identifier id, int buttonX, int buttonY) {
-        SpawnValidator validator = ModSpawnValidators.getValidator(id);
+    private void createButton(Identifier key, int buttonX, int buttonY) {
+        SpawnValidator validator = ModSpawnValidators.getValidator(key);
         MobEntry buttonEntry = new MobEntry(buttonX, buttonY, validator, this);
         this.addEntry(buttonEntry);
     }

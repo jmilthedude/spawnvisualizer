@@ -75,7 +75,7 @@ public class ModSpawnValidators {
         registerSpawnTest(EntityType.SHEEP, AnimalEntity::isValidNaturalSpawn);
         registerSpawnTest(EntityType.SILVERFISH, SilverfishEntity::canSpawn);
         registerSpawnTest(EntityType.SKELETON, SpawnUtils::canHostileSpawnInDark);
-        registerSpawnTest(EntityType.SKELETON_HORSE, SkeletonHorseEntity::canSpawn);
+        registerSpawnTest(EntityType.SKELETON_HORSE, AnimalEntity::isValidNaturalSpawn);
         registerSpawnTest(EntityType.SLIME, SpawnUtils::canSlimeSpawn);
         registerSpawnTest(EntityType.SNOW_GOLEM, MobEntity::canMobSpawn);
         registerSpawnTest(EntityType.SPIDER, SpawnUtils::canHostileSpawnInDark);
@@ -88,7 +88,7 @@ public class ModSpawnValidators {
         registerSpawnTest(EntityType.WITHER_SKELETON, SpawnUtils::canHostileSpawnInDark);
         registerSpawnTest(EntityType.WOLF, WolfEntity::canSpawn);
         registerSpawnTest(EntityType.ZOMBIE, SpawnUtils::canHostileSpawnInDark);
-        registerSpawnTest(EntityType.ZOMBIE_HORSE, ZombieHorseEntity::canSpawn);
+        registerSpawnTest(EntityType.ZOMBIE_HORSE, AnimalEntity::isValidNaturalSpawn);
         registerSpawnTest(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglinEntity::canSpawn);
         registerSpawnTest(EntityType.ZOMBIE_VILLAGER, SpawnUtils::canHostileSpawnInDark);
         registerSpawnTest(EntityType.CAT, AnimalEntity::isValidNaturalSpawn);
@@ -194,6 +194,10 @@ public class ModSpawnValidators {
 
     public static List<SpawnValidator> getValidators() {
         return new ArrayList<>(validators.values());
+    }
+
+    public static HashMap<Identifier, SpawnValidator> getValidatorMap() {
+        return validators;
     }
 
     public static SpawnTest<?> getSpawnTest(EntityType<?> type) {

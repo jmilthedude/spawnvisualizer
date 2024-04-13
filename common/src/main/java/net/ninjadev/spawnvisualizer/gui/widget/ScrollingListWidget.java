@@ -1,7 +1,6 @@
 package net.ninjadev.spawnvisualizer.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -9,6 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.ninjadev.spawnvisualizer.gui.ConfigScreen;
 import net.ninjadev.spawnvisualizer.gui.widget.entry.Entry;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -65,24 +65,25 @@ public abstract class ScrollingListWidget extends ClickableWidget {
     }
 
     @Override
-    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         Rectangle renderableBounds = getRenderableBounds();
         Rectangle scrollBounds = getScrollbarBounds();
         Rectangle scrollableBounds = getScrollableBounds();
-        MatrixStack matrices = context.getMatrices();
 
 
-        renderOverflowHidden(context,
-                (ctx) -> ctx.fill(renderableBounds.x, renderableBounds.y, renderableBounds.x + renderableBounds.width + 1, renderableBounds.y + renderableBounds.height + 1, 0xFF_888888),
-                (ctx) -> {
-                    MatrixStack ms = ctx.getMatrices();
+        renderOverflowHidden(matrices,
+                (ms) -> fill(ms, renderableBounds.x, renderableBounds.y, renderableBounds.x + renderableBounds.width, renderableBounds.y + renderableBounds.height, 0xFF_888888),
+                (ms) -> {
                     ms.push();
                     ms.translate(0, -yOffset, 0);
 
                     int containerX = mouseX - scrollableBounds.x;
                     int containerY = mouseY - scrollableBounds.y + yOffset;
 
-                    entries.forEach(entry -> entry.renderWidget(ctx, containerX, containerY, delta));
+                    for (Entry entry : entries) {
+                        entry.render(ms, containerX, containerY, delta);
+                    }
+
                     ms.pop();
                 });
 
@@ -97,22 +98,22 @@ public abstract class ScrollingListWidget extends ClickableWidget {
             matrices.push();
             matrices.translate(scrollBounds.x, scrollBounds.y, 0);
             matrices.scale(1, scrollBounds.height, 1);
-            context.drawTexture(ConfigScreen.HUD_RESOURCE, 1, 0, 0, 146, 8, 1);
+            drawTexture(matrices,  1, 0, 0, 146, 8, 1);
             matrices.pop();
-            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y, 0, 145, 8, 1);
-            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y + scrollBounds.height, 0, 251, 8, 1);
+            drawTexture(matrices,  scrollBounds.x + 1, scrollBounds.y, 0, 145, 8, 1);
+            drawTexture(matrices,  scrollBounds.x + 1, scrollBounds.y + scrollBounds.height, 0, 251, 8, 1);
 
             int scrollU = scrolling ? 28 : scrollBounds.contains(mouseX, mouseY) ? 18 : 8;
 
             matrices.push();
             matrices.translate(0, (scrollBounds.getHeight() - scrollHeight) * scrollPercentage, 0);
-            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y,
+            drawTexture(matrices,  scrollBounds.x + 1, scrollBounds.y,
                     scrollU, 104,
                     8, scrollHeight);
-            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y - 2,
+            drawTexture(matrices,  scrollBounds.x + 1, scrollBounds.y - 2,
                     scrollU, 101,
                     8, 2);
-            context.drawTexture(ConfigScreen.HUD_RESOURCE, scrollBounds.x + 1, scrollBounds.y + scrollHeight,
+            drawTexture(matrices,  scrollBounds.x + 1, scrollBounds.y + scrollHeight,
                     scrollU, 253,
                     8, 2);
             matrices.pop();
@@ -124,22 +125,28 @@ public abstract class ScrollingListWidget extends ClickableWidget {
 
     }
 
-    private void renderOverflowHidden(DrawContext context, Consumer<DrawContext> backgroundRenderer, Consumer<DrawContext> innerRenderer) {
-        MatrixStack matrices = context.getMatrices();
+    private void renderOverflowHidden(MatrixStack matrices, Consumer<MatrixStack> backgroundRenderer, Consumer<MatrixStack> innerRenderer) {
         matrices.push();
         RenderSystem.enableDepthTest();
 
         matrices.translate(0, 0, 950);
         RenderSystem.colorMask(false, false, false, false);
-        context.fill(-4680, -2260, 4680, this.getRenderableBounds().y, 0xff_000000);
-        context.fill(-4680, this.getRenderableBounds().y + this.getRenderableBounds().height + 1, 4680, 2260, 0xff_000000);
-        context.fill(-4680, -2260, this.getRenderableBounds().x, 2260, 0xff_000000);
-        context.fill(this.getRenderableBounds().x + this.getRenderableBounds().width, -2260, 4680, 2260, 0xff_000000);
+        fill(matrices, 4680, 2260, -4680, -2260, 0xff_000000);
         RenderSystem.colorMask(true, true, true, true);
         matrices.translate(0, 0, -950);
 
-        backgroundRenderer.accept(context);
-        innerRenderer.accept(context);
+        RenderSystem.depthFunc(GL11.GL_GEQUAL);
+        backgroundRenderer.accept(matrices);
+        RenderSystem.depthFunc(GL11.GL_LEQUAL);
+        innerRenderer.accept(matrices);
+        RenderSystem.depthFunc(GL11.GL_GEQUAL);
+
+        matrices.translate(0, 0, -950);
+        RenderSystem.colorMask(false, false, false, false);
+        fill(matrices, 4680, 2260, -4680, -2260, 0xff_000000);
+        RenderSystem.colorMask(true, true, true, true);
+        matrices.translate(0, 0, 950);
+        RenderSystem.depthFunc(GL11.GL_LEQUAL);
 
         RenderSystem.disableDepthTest();
         matrices.pop();
@@ -186,7 +193,7 @@ public abstract class ScrollingListWidget extends ClickableWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
         Rectangle scrollableBounds = getScrollableBounds();
         Rectangle renderableBounds = getRenderableBounds();
         float viewportRatio = (float) renderableBounds.getHeight() / scrollableBounds.height;

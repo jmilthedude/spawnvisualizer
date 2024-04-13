@@ -1,25 +1,30 @@
-
-modLoader="javafml" #mandatory
-loaderVersion="[49,)"
-license="MIT"
+modLoader = "javafml" #mandatory
+loaderVersion = "[45,)"
+license = "MIT"
 [[mods]] #mandatory
-modId="spawnvisualizer" #mandatory
-version="${version}" #mandatory
-displayName="Spawn Visualizer" #mandatory
-authors="jmilthedude" #optional
-description='''
+modId = "spawnvisualizer" #mandatory
+version = "${version}" #mandatory
+displayName = "Spawn Visualizer" #mandatory
+authors = "jmilthedude" #optional
+description = '''
 A client side only mod which allows you to visualize where various mobs can spawn.
 '''
 
 [[dependencies.spawnvisualizer]] #optional
-    modId="forge" #mandatory
-    mandatory=true #mandatory
-    versionRange="[49,)" #mandatory
-    ordering="NONE"
-    side="BOTH"
+modId = "forge" #mandatory
+mandatory = true #mandatory
+versionRange = "[45,)" #mandatory
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.spawnvisualizer]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.spawnvisualizer]]
+modId = "architectury"
+mandatory = true
+versionRange = "[8.2.89,)"
+ordering = "AFTER"
+side = "BOTH"

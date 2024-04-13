@@ -1,13 +1,15 @@
 package net.ninjadev.spawnvisualizer.gui.widget;
 
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static net.minecraft.client.gui.DrawableHelper.fill;
 
 public class ColorSquareWidget implements Drawable, Widget {
 
@@ -27,8 +29,8 @@ public class ColorSquareWidget implements Drawable, Widget {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(this.x, this.y, this.x + this.width, this.y + this.height, this.color.get().getRGB());
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        fill(matrices, this.x, this.y, this.x + this.width, this.y + this.height, this.color.get().getRGB());
     }
 
     @Override
